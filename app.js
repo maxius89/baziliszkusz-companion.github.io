@@ -48,7 +48,7 @@ class AdventureSheet {
                 <input type="number" min="0" max="99" value="0" aria-label="Ellenfél ${i + 1} Test">
             </div>
             <div class="form-group">
-                <label>KECSES&#201;G:</label>
+                <label>KECSESS&#201;G:</label>
                 <input type="number" min="0" max="99" value="0" aria-label="Ellenfél ${i + 1} Kecseség">
             </div>
             <div class="form-group">
@@ -174,20 +174,6 @@ class AdventureSheet {
                     <li><strong>Export/Import:</strong> JSON fájlba mentheted és onnan visszatöltheted az adatokat</li>
                     <li><strong>Kockadobó:</strong> 1D6, 2D6 dobása és harc dobás 2D6 vs 2D6</li>
                     <li><strong>Ellenfél követés:</strong> 9 ellenfél statisztikáinak nyomon követése</li>
-                </ul>
-                
-                <h3>Karakter Alkaszt</h3>
-                <ul class="help-features">
-                    <li><strong>Mágusvadász:</strong> Mágikus lények és varázslók ellen specializálódott harcos</li>
-                    <li><strong>Szabotőr:</strong> Lopakodás és szabotázs mestere</li>
-                    <li><strong>Véreb:</strong> Nyomkövetés és vadászat szakértője</li>
-                </ul>
-                
-                <h3>Karakter Múlt</h3>
-                <ul class="help-features">
-                    <li><strong>Egy nagyhatalmú mágus testőre:</strong> Elit harcos háttér</li>
-                    <li><strong>A Birodalom ellenségeinek ostora:</strong> Katonai veterán</li>
-                    <li><strong>Magiko-technikus kísérletek túlélője:</strong> Mágikus kísérlet áldozata</li>
                 </ul>
             </div>
         `;
