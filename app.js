@@ -1,5 +1,11 @@
 class AdventureSheet {
     constructor() {
+        this.AUTOSAVE_INTERVAL = 30000; // 30 seconds
+        this.MAX_HISTORY_ITEMS = 10;
+        this.STORAGE_KEY_DATA = 'kalandlap_data';
+        this.STORAGE_KEY_HISTORY = 'kalandlap_dice_history';
+
+        this.generateBattleCards();
         this.data = this.initializeData();
         this.loadFromStorage();
         this.populateForm();
@@ -24,6 +30,35 @@ class AdventureSheet {
             }))
         };
     }
+
+    generateBattleCards() {
+    const battleGrid = document.querySelector('.battle-grid');
+    if (!battleGrid) return;
+    
+    // Clear existing cards if any
+    battleGrid.innerHTML = '';
+    
+    // Generate 9 battle cards
+    for (let i = 0; i < 9; i++) {
+        const card = document.createElement('div');
+        card.className = 'battle-card';
+        card.innerHTML = `
+            <div class="form-group">
+                <label>TEST:</label>
+                <input type="number" min="0" max="99" value="0" aria-label="Ellenfél ${i + 1} Test">
+            </div>
+            <div class="form-group">
+                <label>KECSES&#201;G:</label>
+                <input type="number" min="0" max="99" value="0" aria-label="Ellenfél ${i + 1} Kecseség">
+            </div>
+            <div class="form-group">
+                <label>ELME:</label>
+                <input type="number" min="0" max="99" value="0" aria-label="Ellenfél ${i + 1} Elme">
+            </div>
+        `;
+        battleGrid.appendChild(card);
+    }
+}
 
     bindEvents() {
         // Save button
@@ -67,28 +102,28 @@ class AdventureSheet {
         document.getElementById('diceBtn').addEventListener('click', () => {
             this.showDiceRoller();
         });
-		
-		// Help button
+        
+        // Help button
         document.getElementById('helpBtn').addEventListener('click', () => {
             this.showHelp();
         });
 
         // Auto-save on input change (including select elements)
-		document.querySelectorAll('input, textarea, select').forEach(input => {
-			input.addEventListener('change', () => {
-				this.collectData();
-				this.saveToStorage();
-			});
-			
-			// Also save on blur for better UX
-			input.addEventListener('blur', () => {
-				this.collectData();
-				this.saveToStorage();
-			});
-		});
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            input.addEventListener('change', () => {
+                this.collectData();
+                this.saveToStorage();
+            });
+            
+            // Also save on blur for better UX
+            input.addEventListener('blur', () => {
+                this.collectData();
+                this.saveToStorage();
+            });
+        });
     }
-	
-	showHelp() {
+    
+    showHelp() {
         // Remove existing help modal if present
         const existing = document.querySelector('.help-modal');
         if (existing) {
@@ -137,7 +172,7 @@ class AdventureSheet {
                     <li><strong>Automatikus mentés:</strong> Az adatok 30 másodpercenként automatikusan mentésre kerülnek</li>
                     <li><strong>Helyi tárolás:</strong> Az adatok a böngésző helyi tárhelyén kerülnek mentésre</li>
                     <li><strong>Export/Import:</strong> JSON fájlba mentheted és onnan visszatöltheted az adatokat</li>
-                    <li><strong>Kockadobó:</strong> 1D6, 2D6 vagy 3D6 dobása előzménylistával</li>
+                    <li><strong>Kockadobó:</strong> 1D6, 2D6 dobása és harc dobás 2D6 vs 2D6</li>
                     <li><strong>Ellenfél követés:</strong> 9 ellenfél statisztikáinak nyomon követése</li>
                 </ul>
                 
@@ -173,54 +208,54 @@ class AdventureSheet {
             this.collectData();
             this.saveToStorage();
             console.log('Auto-save triggered');
-        }, 30000);
+        }, this.AUTOSAVE_INTERVAL);
     }
 
-	collectData() {
-		// Collect player stats
-		this.data.test = parseInt(document.getElementById('test').value) || 0;
-		this.data.skill = parseInt(document.getElementById('skill').value) || 0;
-		this.data.mind = parseInt(document.getElementById('mind').value) || 0;
-		this.data.occasion = document.getElementById('occasion').value;
-		this.data.past = document.getElementById('past').value;
-		this.data.equipment = document.getElementById('equipment').value;
-		this.data.spells = document.getElementById('spells').value;
-		this.data.notes = document.getElementById('notes').value;
+    collectData() {
+        // Collect player stats
+        this.data.test = parseInt(document.getElementById('test').value) || 0;
+        this.data.skill = parseInt(document.getElementById('skill').value) || 0;
+        this.data.mind = parseInt(document.getElementById('mind').value) || 0;
+        this.data.occasion = document.getElementById('occasion').value;
+        this.data.past = document.getElementById('past').value;
+        this.data.equipment = document.getElementById('equipment').value;
+        this.data.spells = document.getElementById('spells').value;
+        this.data.notes = document.getElementById('notes').value;
 
-		// Collect battle data - each card has 3 inputs (test, skill, mind)
-		document.querySelectorAll('.battle-card').forEach((card, index) => {
-			const inputs = card.querySelectorAll('input[type="number"]');
-			this.data.battles[index] = {
-				test: parseInt(inputs[0].value) || 0,
-				skill: parseInt(inputs[1].value) || 0,
-				mind: parseInt(inputs[2].value) || 0
-			};
-		});
-	}
+        // Collect battle data - each card has 3 inputs (test, skill, mind)
+        document.querySelectorAll('.battle-card').forEach((card, index) => {
+            const inputs = card.querySelectorAll('input[type="number"]');
+            this.data.battles[index] = {
+                test: parseInt(inputs[0].value) || 0,
+                skill: parseInt(inputs[1].value) || 0,
+                mind: parseInt(inputs[2].value) || 0
+            };
+        });
+    }
 
-	populateForm() {
-		// Populate player stats
-		document.getElementById('test').value = this.data.test;
-		document.getElementById('skill').value = this.data.skill;
-		document.getElementById('mind').value = this.data.mind;
-		document.getElementById('occasion').value = this.data.occasion || '';  // Select
-		document.getElementById('past').value = this.data.past || '';  // Select
-		document.getElementById('equipment').value = this.data.equipment;
-		document.getElementById('spells').value = this.data.spells;
-		document.getElementById('notes').value = this.data.notes;
+    populateForm() {
+        // Populate player stats
+        document.getElementById('test').value = this.data.test;
+        document.getElementById('skill').value = this.data.skill;
+        document.getElementById('mind').value = this.data.mind;
+        document.getElementById('occasion').value = this.data.occasion || '';
+        document.getElementById('past').value = this.data.past || '';
+        document.getElementById('equipment').value = this.data.equipment;
+        document.getElementById('spells').value = this.data.spells;
+        document.getElementById('notes').value = this.data.notes;
 
-		// Populate battle data
-		document.querySelectorAll('.battle-card').forEach((card, index) => {
-			const inputs = card.querySelectorAll('input[type="number"]');
-			inputs[0].value = this.data.battles[index].test;
-			inputs[1].value = this.data.battles[index].skill;
-			inputs[2].value = this.data.battles[index].mind;
-		});
-	}
+        // Populate battle data
+        document.querySelectorAll('.battle-card').forEach((card, index) => {
+            const inputs = card.querySelectorAll('input[type="number"]');
+            inputs[0].value = this.data.battles[index].test;
+            inputs[1].value = this.data.battles[index].skill;
+            inputs[2].value = this.data.battles[index].mind;
+        });
+    }
 
     saveToStorage() {
         try {
-            localStorage.setItem('kalandlap_data', JSON.stringify(this.data));
+            localStorage.setItem(this.STORAGE_KEY_DATA, JSON.stringify(this.data));
             console.log('Data saved to localStorage');
         } catch (e) {
             console.error('Failed to save data:', e);
@@ -230,7 +265,7 @@ class AdventureSheet {
 
     loadFromStorage() {
         try {
-            const saved = localStorage.getItem('kalandlap_data');
+            const saved = localStorage.getItem(this.STORAGE_KEY_DATA);
             if (saved) {
                 this.data = JSON.parse(saved);
                 console.log('Data loaded from localStorage');
@@ -306,7 +341,7 @@ class AdventureSheet {
         );
     }
 
-        showDiceRoller() {
+    showDiceRoller() {
         // Check if already exists
         let sidebar = document.querySelector('.dice-roller-sidebar');
         
@@ -380,7 +415,7 @@ class AdventureSheet {
         const results = [];
         let total = 0;
         
-        for (let i = 0; i < numDice; i++) {
+                for (let i = 0; i < numDice; i++) {
             const roll = this.rollDice(6);
             results.push(roll);
             total += roll;
@@ -408,11 +443,11 @@ class AdventureSheet {
     }
 
     rollBattle() {
-        // Roll for attacker
+        // Roll for attacker (player)
         const attackerRolls = [this.rollDice(6), this.rollDice(6)];
         const attackerTotal = attackerRolls[0] + attackerRolls[1];
         
-        // Roll for defender
+        // Roll for defender (enemy)
         const defenderRolls = [this.rollDice(6), this.rollDice(6)];
         const defenderTotal = defenderRolls[0] + defenderRolls[1];
         
@@ -453,17 +488,17 @@ class AdventureSheet {
         history.unshift(entry);
         
         // Keep only last 10 rolls
-        if (history.length > 10) {
+        if (history.length > this.MAX_HISTORY_ITEMS) {
             history.pop();
         }
         
-        localStorage.setItem('kalandlap_dice_history', JSON.stringify(history));
+        localStorage.setItem(this.STORAGE_KEY_HISTORY, JSON.stringify(history));
         this.displayDiceHistory(history);
     }
 
     getDiceHistory() {
         try {
-            const history = localStorage.getItem('kalandlap_dice_history');
+            const history = localStorage.getItem(this.STORAGE_KEY_HISTORY);
             return history ? JSON.parse(history) : [];
         } catch (e) {
             return [];
@@ -475,7 +510,7 @@ class AdventureSheet {
         this.displayDiceHistory(history);
     }
 
-        displayDiceHistory(history) {
+    displayDiceHistory(history) {
         const container = document.querySelector('.history-items');
         if (!container) return;
         
@@ -504,92 +539,6 @@ class AdventureSheet {
                 `;
             }
         }).join('');
-    }
-
-    rollAndShow(numDice) {
-        const results = [];
-        let total = 0;
-        
-        for (let i = 0; i < numDice; i++) {
-            const roll = this.rollDice(6);
-            results.push(roll);
-            total += roll;
-        }
-        
-        // Animate the result
-        const resultElement = document.getElementById('diceResult');
-        resultElement.classList.add('rolling');
-        
-        setTimeout(() => {
-            resultElement.classList.remove('rolling');
-            const resultNumber = resultElement.querySelector('.result-number');
-            
-            if (numDice === 1) {
-                resultNumber.textContent = total;
-            } else {
-                resultNumber.innerHTML = `${total}<br><small>${results.join(' + ')}</small>`;
-            }
-            
-            // Add to history
-            this.addToHistory(numDice, results, total);
-        }, 300);
-    }
-
-    rollDice(sides = 6) {
-        return Math.floor(Math.random() * sides) + 1;
-    }
-
-    addToHistory(numDice, results, total) {
-        const history = this.getDiceHistory();
-        const entry = {
-            timestamp: new Date().toLocaleTimeString('hu-HU'),
-            numDice: numDice,
-            results: results,
-            total: total
-        };
-        
-        history.unshift(entry);
-        
-        // Keep only last 10 rolls
-        if (history.length > 10) {
-            history.pop();
-        }
-        
-        localStorage.setItem('kalandlap_dice_history', JSON.stringify(history));
-        this.displayDiceHistory(history);
-    }
-
-    getDiceHistory() {
-        try {
-            const history = localStorage.getItem('kalandlap_dice_history');
-            return history ? JSON.parse(history) : [];
-        } catch (e) {
-            return [];
-        }
-    }
-
-    loadDiceHistory() {
-        const history = this.getDiceHistory();
-        this.displayDiceHistory(history);
-    }
-
-    displayDiceHistory(history) {
-        const container = document.querySelector('.history-items');
-        if (!container) return;
-        
-        if (history.length === 0) {
-            container.innerHTML = '<div class="history-empty">Még nem dobtál kockát</div>';
-            return;
-        }
-        
-        container.innerHTML = history.map(entry => `
-            <div class="history-item">
-                <span class="history-time">${entry.timestamp}</span>
-                <span class="history-dice">${entry.numDice}D6:</span>
-                <span class="history-total">${entry.total}</span>
-                ${entry.numDice > 1 ? `<span class="history-details">(${entry.results.join(' + ')})</span>` : ''}
-            </div>
-        `).join('');
     }
 
     showNotification(message) {
@@ -649,8 +598,8 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         document.getElementById('diceBtn').click();
     }
-	
-	// Ctrl+H for help
+    
+    // Ctrl+H for help
     if (e.ctrlKey && e.key === 'h') {
         e.preventDefault();
         document.getElementById('helpBtn').click();

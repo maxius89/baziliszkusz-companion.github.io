@@ -1,247 +1,135 @@
 <!DOCTYPE html>
 <html lang="hu">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kalandlap - Digitális karakterlap kaland játékokhoz">
     <title>Kalandlap</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
-        <div class="parchment">
+        <main class="parchment">
+            <!-- Header -->
             <header>
-              
                 <h1>KALANDLAP</h1>
-                <div class="header-decoration">
-                </div>
             </header>
 
+            <!-- Main Content Grid -->
             <div class="content-grid">
-                <!-- Character Stats Section (Top Left) -->
-                <section class="stats-section">
+                <!-- Player Stats -->
+                <section class="stats-section" aria-label="Karakter statisztikák">
                     <div class="form-group">
-                        <label>TEST:</label>
-                        <input type="number" id="test" min="0" max="99" value="0">
+                        <label for="test">TEST:</label>
+                        <input type="number" id="test" min="0" max="99" value="0" aria-label="Test érték">
                     </div>
-                    
-                    <div class="divider"></div>
-                    
-                    <div class="form-group">
-                        <label>KECSES&#201;G:</label>
-                        <input type="number" id="skill" min="0" max="99" value="0">
-                    </div>
-                    
-                    <div class="divider"></div>
-                    
-                    <div class="form-group">
-                        <label>ELME:</label>
-                        <input type="number" id="mind" min="0" max="99" value="0">
-                    </div>
-                </section>
-				<!-- Combat Section (Top Middle) -->
-				<section class="combat-section">
-					<div class="form-group">
-						<label>ALKASZT:</label>
-						<select id="occasion">
-							<option value="">-- V&#193;LASSZ --</option>
-							<option value="magusvadasz">M&#225;gusvad&#225;sz</option>
-							<option value="szabotor">Szabot&#337;r</option>
-							<option value="vereb">V&#233;reb</option>
-						</select>
-					</div>
-					
-					<div class="divider"></div>
-					
-					<div class="form-group">
-						<label>M&#218;LT:</label>
-						<select id="past">
-							<option value="">-- V&#193;LASSZ --</option>
-							<option value="testor">Egy nagyhatalmú mágus testőre</option>
-							<option value="ostora">A Birodalom ellenségeinek ostora</option>
-							<option value="tulelo">Magiko-technikus kísérletek túlélője</option>
-						</select>
-					</div>
-				</section>
 
-                <!-- Equipment Section (Bottom Left - Full Height) -->
-                <section class="equipment-section">
+                    <div class="divider"></div>
+
                     <div class="form-group">
-                        <label>FELSZEREL&#201;S:</label>
-                        <textarea id="equipment" rows="12" placeholder=""></textarea>
+                        <label for="skill">KECSES&#201;G:</label>
+                        <input type="number" id="skill" min="0" max="99" value="0" aria-label="Kecseség érték">
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="form-group">
+                        <label for="mind">ELME:</label>
+                        <input type="number" id="mind" min="0" max="99" value="0" aria-label="Elme érték">
                     </div>
                 </section>
 
-                <!-- Spells and Notes Section (Bottom Middle) -->
-                <section class="spells-notes-section">
+                <!-- Character Background -->
+                <section class="combat-section" aria-label="Karakter háttér">
                     <div class="form-group">
-                        <label>VAR&#193;ZSLATOK:</label>
-                        <textarea id="spells" rows="5" placeholder=""></textarea>
+                        <label for="occasion">ALKASZT:</label>
+                        <select id="occasion" aria-label="Válassz alkasztot">
+                            <option value="">-- V&#193;LASSZ --</option>
+                            <option value="magusvadasz">M&#225;gusvad&#225;sz</option>
+                            <option value="szabotor">Szabot&#337;r</option>
+                            <option value="vereb">V&#233;reb</option>
+                        </select>
                     </div>
-                    
+
                     <div class="divider"></div>
-                    
+
                     <div class="form-group">
-                        <label>FELJEGYZ&#201;SEK:</label>
-                        <textarea id="notes" rows="5" placeholder=""></textarea>
+                        <label for="past">M&#218;LT:</label>
+                        <select id="past" aria-label="Válassz múltat">
+                            <option value="">-- V&#193;LASSZ --</option>
+                            <option value="testor">Egy nagyhatalmú mágus testőre</option>
+                            <option value="ostora">A Birodalom ellenségeinek ostora</option>
+                            <option value="tulelo">Magiko-technikus kísérletek túlélője</option>
+                        </select>
                     </div>
                 </section>
 
-                <!-- Battle Tracker Grid (Right Side - Full Height) -->
-                <section class="battle-grid">
-                    <div class="battle-card">
-                        <div class="form-group">
-                            <label>TEST:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>KECSES&#201;G:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>ELME:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
+                <!-- Equipment -->
+                <section class="equipment-section" aria-label="Felszerelés">
+                    <div class="form-group">
+                        <label for="equipment">FELSZEREL&#201;S:</label>
+                        <textarea id="equipment" rows="12" placeholder="" aria-label="Felszerelés lista"></textarea>
+                    </div>
+                </section>
+
+                <!-- Spells and Notes -->
+                <section class="spells-notes-section" aria-label="Varázslatok és jegyzetek">
+                    <div class="form-group">
+                        <label for="spells">VAR&#193;ZSLATOK:</label>
+                        <textarea id="spells" rows="5" placeholder="" aria-label="Varázslatok lista"></textarea>
                     </div>
 
-                    <div class="battle-card">
-                        <div class="form-group">
-                            <label>TEST:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>KECSES&#201;G:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>ELME:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                    </div>
+                    <div class="divider"></div>
 
-                    <div class="battle-card">
-                        <div class="form-group">
-                            <label>TEST:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>KECSES&#201;G:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>ELME:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
+                    <div class="form-group">
+                        <label for="notes">FELJEGYZ&#201;SEK:</label>
+                        <textarea id="notes" rows="5" placeholder="" aria-label="Jegyzetek"></textarea>
                     </div>
+                </section>
 
-                    <div class="battle-card">
-                        <div class="form-group">
-                            <label>TEST:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>KECSES&#201;G:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>ELME:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                    </div>
-
-                    <div class="battle-card">
-                        <div class="form-group">
-                            <label>TEST:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>KECSES&#201;G:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>ELME:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                    </div>
-
-                    <div class="battle-card">
-                        <div class="form-group">
-                            <label>TEST:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>KECSES&#201;G:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>ELME:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                    </div>
-
-                    <div class="battle-card">
-                        <div class="form-group">
-                            <label>TEST:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>KECSES&#201;G:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>ELME:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                    </div>
-
-                    <div class="battle-card">
-                        <div class="form-group">
-                            <label>TEST:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>KECSES&#201;G:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>ELME:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                    </div>
-
-                    <div class="battle-card">
-                        <div class="form-group">
-                            <label>TEST:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>KECSES&#201;G:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>ELME:</label>
-                            <input type="number" min="0" max="99" value="0">
-                        </div>
-                    </div>
+                <!-- Battle Tracker -->
+                <section class="battle-grid" aria-label="Harc követő">
+                    <!-- Battle cards will be generated by JavaScript -->
                 </section>
             </div>
 
             <!-- Action Buttons -->
-			<div class="actions">
-				<button id="saveBtn" class="btn btn-primary">&#128190; MENT&#201;S</button>
-				<button id="loadBtn" class="btn btn-secondary">&#128194; BET&#214;LT&#201;S</button>
-				<button id="exportBtn" class="btn btn-secondary">&#128229; EXPORT&#193;L&#193;S</button>
-				<button id="importBtn" class="btn btn-secondary">&#128193; IMPORT&#193;L&#193;S</button>
-				<button id="diceBtn" class="btn btn-primary">&#127922; KOCKA</button>
-				<button id="helpBtn" class="btn btn-secondary">&#10067; S&#218;G&#211;</button>
-				<button id="resetBtn" class="btn btn-danger">&#128260; &#218;JRAKEZD&#201;S</button>
-				<input type="file" id="importFile" accept=".json" style="display: none;">
-			</div>
-        </div>
+            <div class="actions">
+                <button id="saveBtn" class="btn btn-primary" aria-label="Mentés">
+                    &#128190; MENT&#201;S
+                </button>
+                <button id="loadBtn" class="btn btn-secondary" aria-label="Betöltés">
+                    &#128194; BET&#214;LT&#201;S
+                </button>
+                <button id="exportBtn" class="btn btn-secondary" aria-label="Exportálás">
+                    &#128229; EXPORT&#193;L&#193;S
+                </button>
+                <button id="importBtn" class="btn btn-secondary" aria-label="Importálás">
+                    &#128193; IMPORT&#193;L&#193;S
+                </button>
+                <button id="diceBtn" class="btn btn-primary" aria-label="Kockadobó">
+                    &#127922; KOCKA
+                </button>
+                <button id="helpBtn" class="btn btn-secondary" aria-label="Súgó">
+                    &#10067; S&#218;G&#211;
+                </button>
+                <button id="resetBtn" class="btn btn-danger" aria-label="Újrakezdés">
+                    &#128260; &#218;JRAKEZD&#201;S
+                </button>
+            </div>
+
+            <!-- Hidden file input -->
+            <input type="file" id="importFile" accept=".json" style="display: none;" aria-hidden="true">
+        </main>
     </div>
 
     <script src="app.js"></script>
 </body>
+
 </html>
