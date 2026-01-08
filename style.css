@@ -1088,3 +1088,133 @@ select option:first-child {
 .chargen-content::-webkit-scrollbar-thumb:hover {
     background: #3a3a3a;
 }
+
+.spell-selection {
+    background: #ffffff;
+    border: 2px solid #1a1a1a;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.spell-selection h4 {
+    font-family: 'Bebas Neue', Arial, sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    text-align: center;
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 8px;
+}
+
+.spell-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.spell-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #1a1a1a;
+    background: #f9f9f9;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.spell-item:hover:not(.disabled) {
+    background: #e8e8e8;
+    transform: translateX(3px);
+}
+
+.spell-item.selected {
+    background: #1a1a1a;
+    color: #f5f3e8;
+}
+
+.spell-item.selected:hover {
+    background: #2a2a2a;
+    color: #ffffff;
+}
+
+.spell-item.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #e0e0e0;
+}
+
+.spell-checkbox {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #1a1a1a;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #ffffff;
+}
+
+.spell-item.selected .spell-checkbox {
+    background: #f5f3e8;
+    border-color: #f5f3e8;
+}
+
+.spell-checkbox::after {
+    content: '✓';
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #1a1a1a;
+    display: none;
+    line-height: 0.8;
+}
+
+.spell-item.selected .spell-checkbox::after {
+    display: block;
+}
+
+.spell-info {
+    flex: 1;
+}
+
+.spell-name {
+    font-family: 'Roboto', Arial, sans-serif;
+    font-weight: bold;
+    font-size: 1rem;
+    color: inherit;
+}
+
+.spell-requirement {
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 0.85rem;
+    color: #666;
+    margin-left: 8px;
+}
+
+.spell-item.selected .spell-requirement {
+    color: #aaa;
+}
+
+.spell-item.selected:hover .spell-requirement {
+    color: #bbb;
+}
+
+.spell-item.disabled .spell-requirement {
+    color: #999;
+}
+
+.spell-counter {
+    text-align: center;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    color: #666;
+}
+
+.spell-counter.warning {
+    color: #c00;
+    font-weight: bold;
+}

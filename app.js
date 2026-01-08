@@ -175,25 +175,36 @@ class AdventureSheet {
                         <span class="shortcut-desc">Súgó megjelenítése</span>
                     </div>
                 </div>
-                
+
                 <h3>Funkciók</h3>
                 <ul class="help-features">
                     <li><strong>Automatikus mentés:</strong> Az adatok 30 másodpercenként automatikusan mentésre kerülnek</li>
                     <li><strong>Helyi tárolás:</strong> Az adatok a böngésző helyi tárhelyén kerülnek mentésre</li>
                     <li><strong>Export/Import:</strong> JSON fájlba mentheted és onnan visszatöltheted az adatokat</li>
+                    <li><strong>Karakter generálás:</strong>Követve a könyv szabályrendszerét</li>
                     <li><strong>Kockadobó:</strong> 1D6, 2D6 dobása és harc dobás 2D6 vs 2D6</li>
                     <li><strong>Ellenfél követés:</strong> 9 ellenfél statisztikáinak nyomon követése</li>
                 </ul>
 
                 <h3>Karakter Generálás</h3>
                 <ul class="help-features">
-                    <li><strong>Alap értékek:</strong> Test: 18, Kecsesség: 7, Elme: 7, Max varázslatok: 1</li>
+                    <li><strong>Alap értékek:</strong> Test: 18, Kecseség: 7, Elme: 7, Max varázslatok: 1</li>
                     <li><strong>14 fejlődéspont:</strong> Költhető a karakter fejlesztésére</li>
                     <li><strong>Test:</strong> +1 = 1 pont (maximum +10)</li>
-                    <li><strong>Kecsesség/Elme:</strong> +1 = 2 pont, +2 = 5 pont, +3 = 9 pont</li>
+                    <li><strong>Kecseség/Elme:</strong> +1 = 2 pont, +2 = 5 pont, +3 = 9 pont</li>
                     <li><strong>Max Varázslatok:</strong> +1 = 4 pont, +2 = 8 pont (maximum +2)</li>
+                    <li><strong>Varázslatok:</strong> 6 varázslat közül választhatsz, mindegyiknek van Elme követelménye</li>
                 </ul>
-            </div>
+
+                <h3>Elérhető Varázslatok</h3>
+                <ul class="help-features">
+                    <li><strong>Ragyogás</strong> - Elme követelmény: 6</li>
+                    <li><strong>Gyorsítás</strong> - Elme követelmény: 7</li>
+                    <li><strong>Varázslók végzete</strong> - Elme követelmény: 9</li>
+                    <li><strong>Manatüske</strong> - Elme követelmény: 8</li>
+                    <li><strong>Izomsorvadás</strong> - Elme követelmény: 9</li>
+                    <li><strong>Éterfolyam</strong> - Elme követelmény: 8</li>
+                </ul>
         `;
         
         document.body.appendChild(modal);
@@ -564,7 +575,7 @@ class AdventureSheet {
         }, 3000);
     }
 
-    showCharGen() {
+        showCharGen() {
         // Check if already exists
         let sidebar = document.querySelector('.chargen-sidebar');
         
@@ -584,7 +595,7 @@ class AdventureSheet {
                 
                 <div class="chargen-info">
                     <strong>Alap értékek:</strong><br>
-                    Test: 18 | Kecsesség: 7 | Elme: 7<br>
+                    Test: 18 | Kecseség: 7 | Elme: 7<br>
                     Max varázslatok: 1<br><br>
                     <strong>14 fejlődéspont</strong> áll rendelkezésre.
                 </div>
@@ -608,7 +619,7 @@ class AdventureSheet {
                     
                     <div class="stat-row">
                         <div class="stat-header">
-                            <span class="stat-name">KECSESS&#201;G</span>
+                            <span class="stat-name">KECSES&#201;G</span>
                             <span class="stat-value" id="genSkill">7</span>
                         </div>
                         <div class="stat-controls" id="skillControls"></div>
@@ -631,6 +642,16 @@ class AdventureSheet {
                         </div>
                         <div class="stat-controls" id="spellsControls"></div>
                         <div class="stat-cost">+1 = 4 pont | +2 = 8 pont (max +2)</div>
+                    </div>
+                </div>
+                
+                <div class="chargen-section">
+                    <div class="spell-selection">
+                        <h4>VAR&#193;ZSLATV&#193;LASZT&#193;S</h4>
+                        <div class="spell-list" id="spellList"></div>
+                        <div class="spell-counter" id="spellCounter">
+                            <span id="selectedSpellCount">0</span> / <span id="maxSpellCount">1</span> varázslat kiválasztva
+                        </div>
                     </div>
                 </div>
                 
@@ -657,6 +678,16 @@ class AdventureSheet {
     }
 
     initCharGen() {
+        // Available spells with their mind requirements
+        this.availableSpells = [
+            { name: 'Ragyog&#225;s', nameText: 'Ragyogás', mindReq: 6 },
+            { name: 'Gyors&#237;t&#225;s', nameText: 'Gyorsítás', mindReq: 7 },
+            { name: 'Var&#225;zsl&#243;k v&#233;gzete', nameText: 'Varázslók végzete', mindReq: 9 },
+            { name: 'Manat&#252;ske', nameText: 'Manatüske', mindReq: 8 },
+            { name: 'Izomsorvad&#225;s', nameText: 'Izomsorvadás', mindReq: 9 },
+            { name: '&#201;terfolyam', nameText: 'Éterfolyam', mindReq: 8 }
+        ];
+        
         this.charGenData = {
             test: 18,
             skill: 7,
@@ -669,10 +700,12 @@ class AdventureSheet {
                 skill: 0,
                 mind: 0,
                 spells: 0
-            }
+            },
+            selectedSpells: []
         };
         
         this.setupCharGenControls();
+        this.renderSpellList();
         this.updateCharGenDisplay();
         
         // Bind action buttons
@@ -685,65 +718,80 @@ class AdventureSheet {
         });
     }
 
-    setupCharGenControls() {
-        // Test controls (+1 for 1 point, max +10)
-        const testControls = document.getElementById('testControls');
-        testControls.innerHTML = '';
-        for (let i = 1; i <= 10; i++) {
-            const btn = document.createElement('button');
-            btn.className = 'stat-btn';
-            btn.textContent = `+${i}`;
-            btn.dataset.stat = 'test';
-            btn.dataset.value = i;
-            btn.dataset.cost = i;
-            btn.addEventListener('click', () => this.selectStatBonus('test', i, i));
-            testControls.appendChild(btn);
+    renderSpellList() {
+        const spellList = document.getElementById('spellList');
+        spellList.innerHTML = '';
+        
+        const currentMind = 7 + this.charGenData.selections.mind;
+        
+        this.availableSpells.forEach((spell, index) => {
+            const spellItem = document.createElement('div');
+            spellItem.className = 'spell-item';
+            
+            const isSelected = this.charGenData.selectedSpells.includes(index);
+            const canSelect = currentMind >= spell.mindReq;
+            
+            if (isSelected) {
+                spellItem.classList.add('selected');
+            }
+            
+            if (!canSelect) {
+                spellItem.classList.add('disabled');
+            }
+            
+            spellItem.innerHTML = `
+                <div class="spell-checkbox"></div>
+                <div class="spell-info">
+                    <span class="spell-name">${spell.name}</span>
+                    <span class="spell-requirement">(Elme: ${spell.mindReq})</span>
+                </div>
+            `;
+            
+            if (canSelect) {
+                spellItem.addEventListener('click', () => {
+                    this.toggleSpell(index);
+                });
+            }
+            
+            spellList.appendChild(spellItem);
+        });
+        
+        this.updateSpellCounter();
+    }
+
+    toggleSpell(spellIndex) {
+        const maxSpells = 1 + this.charGenData.selections.spells;
+        const currentIndex = this.charGenData.selectedSpells.indexOf(spellIndex);
+        
+        if (currentIndex > -1) {
+            // Deselect spell
+            this.charGenData.selectedSpells.splice(currentIndex, 1);
+        } else {
+            // Check if we can select more spells
+            if (this.charGenData.selectedSpells.length >= maxSpells) {
+                this.showNotification('MAXIMUM VARÁZSLAT ELÉRVE! ✗');
+                return;
+            }
+            // Select spell
+            this.charGenData.selectedSpells.push(spellIndex);
         }
         
-        // Skill controls (+1=2, +2=5, +3=9)
-        const skillControls = document.getElementById('skillControls');
-        skillControls.innerHTML = '';
-        const skillOptions = [{val: 1, cost: 2}, {val: 2, cost: 5}, {val: 3, cost: 9}];
-        skillOptions.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'stat-btn';
-            btn.textContent = `+${opt.val}`;
-            btn.dataset.stat = 'skill';
-            btn.dataset.value = opt.val;
-            btn.dataset.cost = opt.cost;
-            btn.addEventListener('click', () => this.selectStatBonus('skill', opt.val, opt.cost));
-            skillControls.appendChild(btn);
-        });
+        this.renderSpellList();
+    }
+
+    updateSpellCounter() {
+        const maxSpells = 1 + this.charGenData.selections.spells;
+        const selectedCount = this.charGenData.selectedSpells.length;
         
-                // Mind controls (+1=2, +2=5, +3=9)
-        const mindControls = document.getElementById('mindControls');
-        mindControls.innerHTML = '';
-        const mindOptions = [{val: 1, cost: 2}, {val: 2, cost: 5}, {val: 3, cost: 9}];
-        mindOptions.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'stat-btn';
-            btn.textContent = `+${opt.val}`;
-            btn.dataset.stat = 'mind';
-            btn.dataset.value = opt.val;
-            btn.dataset.cost = opt.cost;
-            btn.addEventListener('click', () => this.selectStatBonus('mind', opt.val, opt.cost));
-            mindControls.appendChild(btn);
-        });
+        document.getElementById('selectedSpellCount').textContent = selectedCount;
+        document.getElementById('maxSpellCount').textContent = maxSpells;
         
-        // Spells controls (+1=4, +2=8)
-        const spellsControls = document.getElementById('spellsControls');
-        spellsControls.innerHTML = '';
-        const spellOptions = [{val: 1, cost: 4}, {val: 2, cost: 8}];
-        spellOptions.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'stat-btn';
-            btn.textContent = `+${opt.val}`;
-            btn.dataset.stat = 'spells';
-            btn.dataset.value = opt.val;
-            btn.dataset.cost = opt.cost;
-            btn.addEventListener('click', () => this.selectStatBonus('spells', opt.val, opt.cost));
-            spellsControls.appendChild(btn);
-        });
+        const counter = document.getElementById('spellCounter');
+        if (selectedCount > maxSpells) {
+            counter.classList.add('warning');
+        } else {
+            counter.classList.remove('warning');
+        }
     }
 
     selectStatBonus(stat, value, cost) {
@@ -766,27 +814,25 @@ class AdventureSheet {
             this.charGenData.selections[stat] = value;
         }
         
-        this.updateCharGenDisplay();
-    }
-
-    getStatCost(stat, value) {
-        if (value === 0) return 0;
-        
-        switch(stat) {
-            case 'test':
-                return value; // +1 = 1 point
-            case 'skill':
-            case 'mind':
-                if (value === 1) return 2;
-                if (value === 2) return 5;
-                if (value === 3) return 9;
-                break;
-            case 'spells':
-                if (value === 1) return 4;
-                if (value === 2) return 8;
-                break;
+        // If mind or max spells changed, update spell list
+        if (stat === 'mind' || stat === 'spells') {
+            const currentMind = 7 + this.charGenData.selections.mind;
+            const maxSpells = 1 + this.charGenData.selections.spells;
+            
+            // Remove spells that no longer meet requirements
+            this.charGenData.selectedSpells = this.charGenData.selectedSpells.filter(spellIndex => {
+                return this.availableSpells[spellIndex].mindReq <= currentMind;
+            });
+            
+            // Remove excess spells if max was reduced
+            if (this.charGenData.selectedSpells.length > maxSpells) {
+                this.charGenData.selectedSpells = this.charGenData.selectedSpells.slice(0, maxSpells);
+            }
+            
+            this.renderSpellList();
         }
-        return 0;
+        
+        this.updateCharGenDisplay();
     }
 
     updateCharGenDisplay() {
@@ -815,13 +861,37 @@ class AdventureSheet {
         } else {
             pointsElement.classList.remove('warning');
         }
-        
-        // Update button states
+                // Update button states
         this.updateCharGenButtons();
+        
+        // Update spell counter
+        this.updateSpellCounter();
         
         // Enable/disable apply button
         const applyBtn = document.getElementById('applyCharGen');
-        applyBtn.disabled = remaining < 0;
+        const maxSpells = 1 + this.charGenData.selections.spells;
+        const selectedCount = this.charGenData.selectedSpells.length;
+        applyBtn.disabled = remaining < 0 || selectedCount > maxSpells;
+    }
+
+    getStatCost(stat, value) {
+        if (value === 0) return 0;
+        
+        switch(stat) {
+            case 'test':
+                return value; // +1 = 1 point
+            case 'skill':
+            case 'mind':
+                if (value === 1) return 2;
+                if (value === 2) return 5;
+                if (value === 3) return 9;
+                break;
+            case 'spells':
+                if (value === 1) return 4;
+                if (value === 2) return 8;
+                break;
+        }
+        return 0;
     }
 
     updateCharGenButtons() {
@@ -862,11 +932,20 @@ class AdventureSheet {
             spells: 0
         };
         this.charGenData.pointsSpent = 0;
+        this.charGenData.selectedSpells = [];
+        this.renderSpellList();
         this.updateCharGenDisplay();
         this.showNotification('KARAKTER VISSZAÁLLÍTVA! ✓');
     }
 
     applyCharGen() {
+        // Validate spell selection
+        const maxSpells = 1 + this.charGenData.selections.spells;
+        if (this.charGenData.selectedSpells.length > maxSpells) {
+            this.showNotification('TÚL SOK VARÁZSLAT KIVÁLASZTVA! ✗');
+            return;
+        }
+        
         // Apply the generated stats to the character sheet
         this.data.test = 18 + this.charGenData.selections.test;
         this.data.skill = 7 + this.charGenData.selections.skill;
@@ -877,19 +956,19 @@ class AdventureSheet {
         document.getElementById('skill').value = this.data.skill;
         document.getElementById('mind').value = this.data.mind;
         
-        // Add note about max spells
-        const maxSpells = 1 + this.charGenData.selections.spells;
-        const currentNotes = this.data.notes;
-        const spellNote = `Max varázslatok: ${maxSpells}`;
+        // Build spell list text
+        let spellsText = '';
         
-        if (!currentNotes.includes('Max varázslatok:')) {
-            this.data.notes = currentNotes ? `${currentNotes}\n\n${spellNote}` : spellNote;
-            document.getElementById('notes').value = this.data.notes;
-        } else {
-            // Replace existing max spells note
-            this.data.notes = currentNotes.replace(/Max varázslatok: \d+/, spellNote);
-            document.getElementById('notes').value = this.data.notes;
+        if (this.charGenData.selectedSpells.length > 0) {
+            const selectedSpellNames = this.charGenData.selectedSpells.map(index => 
+                this.availableSpells[index].nameText
+            );
+            spellsText = selectedSpellNames.join('\n');
         }
+        
+        // Update spells textarea
+        this.data.spells = spellsText;
+        document.getElementById('spells').value = spellsText;
         
         // Save changes
         this.saveToStorage();
@@ -899,9 +978,69 @@ class AdventureSheet {
         
         this.showNotification('KARAKTER ALKALMAZVA! ✓');
     }
+
+    setupCharGenControls() {
+        // Test controls (+1 for 1 point, max +10)
+        const testControls = document.getElementById('testControls');
+        testControls.innerHTML = '';
+        for (let i = 1; i <= 10; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'stat-btn';
+            btn.textContent = `+${i}`;
+            btn.dataset.stat = 'test';
+            btn.dataset.value = i;
+            btn.dataset.cost = i;
+            btn.addEventListener('click', () => this.selectStatBonus('test', i, i));
+            testControls.appendChild(btn);
+        }
+        
+        // Skill controls (+1=2, +2=5, +3=9)
+        const skillControls = document.getElementById('skillControls');
+        skillControls.innerHTML = '';
+        const skillOptions = [{val: 1, cost: 2}, {val: 2, cost: 5}, {val: 3, cost: 9}];
+        skillOptions.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'stat-btn';
+            btn.textContent = `+${opt.val}`;
+            btn.dataset.stat = 'skill';
+            btn.dataset.value = opt.val;
+            btn.dataset.cost = opt.cost;
+            btn.addEventListener('click', () => this.selectStatBonus('skill', opt.val, opt.cost));
+            skillControls.appendChild(btn);
+        });
+        
+        // Mind controls (+1=2, +2=5, +3=9)
+        const mindControls = document.getElementById('mindControls');
+        mindControls.innerHTML = '';
+        const mindOptions = [{val: 1, cost: 2}, {val: 2, cost: 5}, {val: 3, cost: 9}];
+        mindOptions.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'stat-btn';
+            btn.textContent = `+${opt.val}`;
+            btn.dataset.stat = 'mind';
+            btn.dataset.value = opt.val;
+            btn.dataset.cost = opt.cost;
+            btn.addEventListener('click', () => this.selectStatBonus('mind', opt.val, opt.cost));
+            mindControls.appendChild(btn);
+        });
+        
+        // Spells controls (+1=4, +2=8)
+        const spellsControls = document.getElementById('spellsControls');
+        spellsControls.innerHTML = '';
+        const spellOptions = [{val: 1, cost: 4}, {val: 2, cost: 8}];
+        spellOptions.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'stat-btn';
+            btn.textContent = `+${opt.val}`;
+            btn.dataset.stat = 'spells';
+            btn.dataset.value = opt.val;
+            btn.dataset.cost = opt.cost;
+            btn.addEventListener('click', () => this.selectStatBonus('spells', opt.val, opt.cost));
+            spellsControls.appendChild(btn);
+        });
+    }
+
 }
-
-
 
 // Initialize the app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
