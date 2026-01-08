@@ -1,0 +1,296 @@
+/* ============================================
+   DICE ROLLER SIDEBAR
+   ============================================ */
+
+.dice-roller-sidebar {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 400px;
+  height: 100vh;
+  background: #f5f3e8;
+  border-left: 4px solid #1a1a1a;
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+.dice-roller-sidebar.open {
+  right: 0;
+}
+
+.dice-roller-content {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.dice-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: 3px solid #1a1a1a;
+  color: #1a1a1a;
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.dice-close:hover {
+  background: #1a1a1a;
+  color: #f5f3e8;
+}
+
+.dice-roller-content h2 {
+  text-align: center;
+  font-family: 'Bebas Neue', Arial, sans-serif;
+  font-size: 2rem;
+  letter-spacing: 6px;
+  color: #1a1a1a;
+  margin-bottom: 25px;
+  margin-top: 10px;
+  border-bottom: 3px solid #1a1a1a;
+  padding-bottom: 15px;
+}
+
+.dice-section {
+  margin-bottom: 25px;
+}
+
+.dice-section h3 {
+  font-family: 'Bebas Neue', Arial, sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.dice-result {
+  background: #ffffff;
+  border: 3px solid #1a1a1a;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 15px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.result-number {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #1a1a1a;
+  font-family: 'Bebas Neue', Arial, sans-serif;
+  line-height: 1;
+}
+
+.result-number small {
+  font-size: 1.2rem;
+  display: block;
+  margin-top: 8px;
+  color: #666;
+}
+
+.dice-result.rolling .result-number {
+  animation: roll 0.3s ease;
+}
+
+@keyframes roll {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+.dice-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.dice-btn {
+  padding: 15px 20px;
+  font-family: 'Bebas Neue', Arial, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  border: 3px solid #1a1a1a;
+  background: #ffffff;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 3px 3px 0 #1a1a1a;
+}
+
+.dice-btn:hover {
+  background: #e8e8e8;
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 #1a1a1a;
+}
+
+.dice-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #1a1a1a;
+}
+
+/* Battle rolls */
+.battle-rolls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.battle-roll h4 {
+  font-family: 'Bebas Neue', Arial, sans-serif;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.battle-result {
+  background: #ffffff;
+  border: 2px solid #1a1a1a;
+  padding: 15px 10px;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #1a1a1a;
+  font-family: 'Bebas Neue', Arial, sans-serif;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.battle-result small {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+.battle-result.rolling {
+  animation: roll 0.3s ease;
+}
+
+/* Dice history */
+.dice-history {
+  border-top: 3px solid #1a1a1a;
+  padding-top: 20px;
+  margin-top: auto;
+}
+
+.dice-history h3 {
+  font-family: 'Bebas Neue', Arial, sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  color: #1a1a1a;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.history-items {
+  max-height: 200px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 2px solid #1a1a1a;
+  padding: 10px;
+}
+
+.history-empty {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 0.85rem;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-time {
+  font-size: 0.75rem;
+  color: #666;
+  min-width: 55px;
+}
+
+.history-dice {
+  font-weight: bold;
+  color: #1a1a1a;
+  min-width: 40px;
+}
+
+.history-total {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #1a1a1a;
+  min-width: 30px;
+  text-align: center;
+}
+
+.history-details {
+  font-size: 0.75rem;
+  color: #666;
+  margin-left: auto;
+}
+
+/* Scrollbars */
+.history-items::-webkit-scrollbar,
+.dice-roller-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.history-items::-webkit-scrollbar-track,
+.dice-roller-content::-webkit-scrollbar-track {
+  background: #f5f3e8;
+}
+
+.history-items::-webkit-scrollbar-thumb,
+.dice-roller-content::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+  border: 1px solid #f5f3e8;
+}
+
+.history-items::-webkit-scrollbar-thumb:hover,
+.dice-roller-content::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dice-roller-sidebar {
+    right: -100%;
+    width: 100%;
+  }
+
+  .dice-roller-sidebar.open {
+    right: 0;
+  }
+}
