@@ -112,6 +112,24 @@ section {
   grid-row: 2;
 }
 
+/* Field bonus displays on main sheet */
+.field-bonus {
+    background: #fffef0;
+    border: 2px solid #1a1a1a;
+    padding: 10px;
+    margin-top: 10px;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 0.8rem;
+    color: #1a1a1a;
+    font-weight: bold;
+    line-height: 1.4;
+    display: none;
+}
+
+.field-bonus:not(:empty) {
+    display: block;
+}
+
 .battle-grid {
   grid-column: 3;
   grid-row: 1 / 3;

@@ -154,6 +154,18 @@ class AdventureSheet {
                 this.showNotification('KALANDLAP VISSZAÁLLÍTVA! ✓');
             }
         });
+
+        // Update bonus display when class-selector changes on main sheet
+        document.getElementById('occasion').addEventListener('change', (e) => {
+            this.data.occasion = e.target.value;
+            this.updateClassBonus();
+        });
+
+        // Update bonus display when background-selector changes on main sheet
+        document.getElementById('past').addEventListener('change', (e) => {
+            this.data.past = e.target.value;
+            this.updateBackgroundBonus();
+        });
     }
 
     setupAutoSave() {
@@ -196,6 +208,9 @@ class AdventureSheet {
         document.getElementById('spells').value = this.data.spells;
         document.getElementById('notes').value = this.data.notes;
 
+        this.updateClassBonus();
+        this.updateBackgroundBonus();
+
         document.querySelectorAll('.battle-card').forEach((card, index) => {
             const inputs = card.querySelectorAll('input[type="number"]');
             inputs[0].value = this.data.battles[index].test;
@@ -204,6 +219,36 @@ class AdventureSheet {
         });
 
         this.log('Form populated');
+    }
+
+    updateClassBonus() {
+        const classes = {
+            magusvadasz: '+1 varázslat',
+            szabotor: '+5 Test',
+            vereb: '+1 Kecseség'
+        };
+
+        const occasionBonus = document.getElementById('occasionBonus');
+        if (this.data.occasion && classes[this.data.occasion]) {
+            occasionBonus.textContent = `Bónusz: ${classes[this.data.occasion]}`;
+        } else {
+            occasionBonus.textContent = '';
+        }
+    }
+
+    updateBackgroundBonus() {
+        const backgrounds = {
+            testor: 'Rúnapajzs a felszerelésben',
+            ostora: '3 Dobókés a felszerelésben',
+            tulelo: 'Speciális képesség: 1 Elme → 2 Test regenerálás'
+        };
+
+        const pastBonus = document.getElementById('pastBonus');
+        if (this.data.past && backgrounds[this.data.past]) {
+            pastBonus.textContent = `Bónusz: ${backgrounds[this.data.past]}`;
+        } else {
+            pastBonus.textContent = '';
+        }
     }
 
     reset() {
