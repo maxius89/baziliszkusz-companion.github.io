@@ -2,6 +2,7 @@
 import { StorageManager } from './storage.js';
 import { DiceRoller } from './dice.js';
 import { CharacterGenerator } from './chargen.js';
+import { CLASSES, BACKGROUNDS } from './config.js';
 
 class AdventureSheet {
     constructor() {
@@ -222,30 +223,18 @@ class AdventureSheet {
     }
 
     updateClassBonus() {
-        const classes = {
-            magusvadasz: '+1 varázslat',
-            szabotor: '+5 Test',
-            vereb: '+1 Kecseség'
-        };
-
         const occasionBonus = document.getElementById('occasionBonus');
-        if (this.data.occasion && classes[this.data.occasion]) {
-            occasionBonus.textContent = `Bónusz: ${classes[this.data.occasion]}`;
+        if (this.data.occasion && CLASSES[this.data.occasion]) {
+            occasionBonus.textContent = `${CLASSES[this.data.occasion].bonus}`;
         } else {
             occasionBonus.textContent = '';
         }
     }
 
     updateBackgroundBonus() {
-        const backgrounds = {
-            testor: 'Rúnapajzs a felszerelésben',
-            ostora: '3 Dobókés a felszerelésben',
-            tulelo: 'Speciális képesség: 1 Elme → 2 Test regenerálás'
-        };
-
         const pastBonus = document.getElementById('pastBonus');
-        if (this.data.past && backgrounds[this.data.past]) {
-            pastBonus.textContent = `Bónusz: ${backgrounds[this.data.past]}`;
+        if (this.data.past && BACKGROUNDS[this.data.past]) {
+            pastBonus.textContent = `${BACKGROUNDS[this.data.past].bonus}`;
         } else {
             pastBonus.textContent = '';
         }

@@ -1,54 +1,13 @@
+import { CLASSES, BACKGROUNDS, SPELLS } from './config.js';
+
 // Character generator module
 export class CharacterGenerator {
     constructor(adventureSheet) {
         this.adventureSheet = adventureSheet;
-
-        // Available classes with bonuses
-        this.classes = {
-            magusvadasz: {
-                name: 'Mágusvadász',
-                bonus: '+1 varázslat',
-                effect: { type: 'spells', value: 1 }
-            },
-            szabotor: {
-                name: 'Szabotőr',
-                bonus: '+5 Test',
-                effect: { type: 'test', value: 5 }
-            },
-            vereb: {
-                name: 'Véreb',
-                bonus: '+1 Kecsesség',
-                effect: { type: 'skill', value: 1 }
-            }
-        };
-
-        // Available backgrounds with bonuses
-        this.backgrounds = {
-            testor: {
-                name: 'Egy nagyhatalmú mágus testőre',
-                bonus: 'Kezdeti felszerelés: Rúnapajzs',
-                effect: { type: 'equipment', value: 'Rúnapajzs' }
-            },
-            ostora: {
-                name: 'A Birodalom ellenségeinek ostora',
-                bonus: 'Kezdeti felszerelés: 3 Dobókés',
-                effect: { type: 'equipment', value: '3× Dobókés' }
-            },
-            tulelo: {
-                name: 'Magiko-technikus kísérletek túlélője',
-                bonus: 'Speciális képesség: Áldozz fel 1 Elmepontot, hogy 2 Testpontot gyógyulj',
-                effect: { type: 'ability', value: 'Magiko-regeneráció: -1 Elme → +2 Test' }
-            }
-        };
-
-        this.availableSpells = [
-            { name: 'Ragyog&#225;s', nameText: 'Ragyogás', mindReq: 6 },
-            { name: 'Gyors&#237;t&#225;s', nameText: 'Gyorsítás', mindReq: 7 },
-            { name: 'Var&#225;zsl&#243;k v&#233;gzete', nameText: 'Varázslók végzete', mindReq: 9 },
-            { name: 'Manat&#252;ske', nameText: 'Manatüske', mindReq: 8 },
-            { name: 'Izomsorvad&#225;s', nameText: 'Izomsorvadás', mindReq: 9 },
-            { name: '&#201;terfolyam', nameText: 'Éterfolyam', mindReq: 8 }
-        ];
+        this.classes = CLASSES;
+        this.backgrounds = BACKGROUNDS;
+        this.spells = SPELLS;
+        this.spellKeys = Object.keys(SPELLS);
     }
 
     show() {
@@ -132,7 +91,7 @@ export class CharacterGenerator {
     updateClassBonus() {
         const bonusElement = document.getElementById('classBonus');
         if (this.data.selectedClass && this.classes[this.data.selectedClass]) {
-            bonusElement.textContent = ` ${this.classes[this.data.selectedClass].bonus}`;
+            bonusElement.textContent = this.classes[this.data.selectedClass].bonus;
             bonusElement.style.display = 'block';
         } else {
             bonusElement.style.display = 'none';
@@ -157,29 +116,6 @@ export class CharacterGenerator {
         }
 
         return maxSpells;
-    }
-
-    updateSpellCounter() {
-        const maxSpells = this.getTotalMaxSpells();
-        const selectedCount = this.data.selectedSpells.length;
-
-        const selectedCountElement = document.getElementById('selectedSpellCount');
-        const maxSpellCountElement = document.getElementById('maxSpellCount');
-        const counter = document.getElementById('spellCounter');
-
-        if (!selectedCountElement || !maxSpellCountElement || !counter) {
-            console.warn('Spell counter elements not found');
-            return;
-        }
-
-        selectedCountElement.textContent = String(selectedCount);
-        maxSpellCountElement.textContent = String(maxSpells);
-
-        if (selectedCount > maxSpells) {
-            counter.classList.add('warning');
-        } else {
-            counter.classList.remove('warning');
-        }
     }
 
     setupControls() {
@@ -247,10 +183,10 @@ export class CharacterGenerator {
 
         if (stat === 'mind' || stat === 'spells') {
             const currentMind = 7 + this.data.selections.mind;
-            const maxSpells = 1 + this.data.selections.spells;
+            const maxSpells = this.getTotalMaxSpells();
 
-            this.data.selectedSpells = this.data.selectedSpells.filter(spellIndex => {
-                return this.availableSpells[spellIndex].mindReq <= currentMind;
+            this.data.selectedSpells = this.data.selectedSpells.filter(spellKey => {
+                return this.spells[spellKey].mindReq <= currentMind;
             });
 
             if (this.data.selectedSpells.length > maxSpells) {
@@ -355,21 +291,22 @@ export class CharacterGenerator {
         const currentMind = 7 + this.data.selections.mind;
         const template = document.getElementById('spell-item-template');
 
-        this.availableSpells.forEach((spell, index) => {
+        this.spellKeys.forEach((spellKey) => {
+            const spell = this.spells[spellKey];
             const spellItem = template.content.cloneNode(true);
             const container = spellItem.querySelector('.spell-item');
 
-            const isSelected = this.data.selectedSpells.includes(index);
+            const isSelected = this.data.selectedSpells.includes(spellKey);
             const canSelect = currentMind >= spell.mindReq;
 
             if (isSelected) container.classList.add('selected');
             if (!canSelect) container.classList.add('disabled');
 
-            spellItem.querySelector('[data-spell-name]').innerHTML = spell.name;
+            spellItem.querySelector('[data-spell-name]').textContent = spell.nameText;
             spellItem.querySelector('[data-spell-req]').textContent = `(Elme: ${spell.mindReq})`;
 
             if (canSelect) {
-                container.addEventListener('click', () => this.toggleSpell(index));
+                container.addEventListener('click', () => this.toggleSpell(spellKey));
             }
 
             spellList.appendChild(spellItem);
@@ -378,9 +315,9 @@ export class CharacterGenerator {
         this.updateSpellCounter();
     }
 
-    toggleSpell(spellIndex) {
+    toggleSpell(spellKey) {
         const maxSpells = this.getTotalMaxSpells();
-        const currentIndex = this.data.selectedSpells.indexOf(spellIndex);
+        const currentIndex = this.data.selectedSpells.indexOf(spellKey);
 
         if (currentIndex > -1) {
             this.data.selectedSpells.splice(currentIndex, 1);
@@ -389,7 +326,7 @@ export class CharacterGenerator {
                 this.adventureSheet.showNotification('MAXIMUM VARÁZSLAT ELÉRVE! ✗');
                 return;
             }
-            this.data.selectedSpells.push(spellIndex);
+            this.data.selectedSpells.push(spellKey);
         }
 
         this.renderSpellList();
@@ -481,13 +418,14 @@ export class CharacterGenerator {
         document.getElementById('past').value = this.data.selectedBackground;
 
         // Update bonus displays on main sheet
-        this.adventureSheet.updateMainSheetBonuses();
+        this.adventureSheet.updateClassBonus();
+        this.adventureSheet.updateBackgroundBonus();
 
         // Build spell list
         let spellsText = '';
         if (this.data.selectedSpells.length > 0) {
-            const selectedSpellNames = this.data.selectedSpells.map(index =>
-                this.availableSpells[index].nameText
+            const selectedSpellNames = this.data.selectedSpells.map(spellKey =>
+                this.spells[spellKey].nameText
             );
             spellsText = selectedSpellNames.join('\n');
         }
@@ -495,15 +433,13 @@ export class CharacterGenerator {
         this.adventureSheet.data.spells = spellsText;
         document.getElementById('spells').value = spellsText;
 
-        // Apply background bonuses to equipment - REPLACE instead of append
+        // Apply background bonuses to equipment
         const bgEffect = this.backgrounds[this.data.selectedBackground].effect;
 
         if (bgEffect.type === 'equipment') {
-            // Replace equipment with background bonus only
             this.adventureSheet.data.equipment = bgEffect.value;
             document.getElementById('equipment').value = bgEffect.value;
         } else {
-            // Clear equipment if background doesn't provide equipment
             this.adventureSheet.data.equipment = '';
             document.getElementById('equipment').value = '';
         }
