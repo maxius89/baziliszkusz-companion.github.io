@@ -78,6 +78,7 @@ class AdventureSheet {
             this.collectData();
             if (this.storageManager.save(this.data)) {
                 this.showNotification('KALANDLAP MENTVE! ✓');
+                this.log('Manual save successful');
             } else {
                 this.showNotification('MENTÉS SIKERTELEN! ✗');
             }
@@ -90,6 +91,7 @@ class AdventureSheet {
                 this.data = loaded;
                 this.populateForm();
                 this.showNotification('KALANDLAP BETÖLTVE! ✓');
+                this.log('Manual load successful');
             } else {
                 this.showNotification('BETÖLTÉS SIKERTELEN! ✗');
             }
@@ -152,26 +154,13 @@ class AdventureSheet {
                 this.showNotification('KALANDLAP VISSZAÁLLÍTVA! ✓');
             }
         });
-
-        // Auto-save on input change
-        document.querySelectorAll('input, textarea, select').forEach(input => {
-            input.addEventListener('change', () => {
-                this.collectData();
-                this.storageManager.save(this.data);
-            });
-
-            input.addEventListener('blur', () => {
-                this.collectData();
-                this.storageManager.save(this.data);
-            });
-        });
     }
 
     setupAutoSave() {
         setInterval(() => {
             this.collectData();
             this.storageManager.save(this.data);
-            this.log('Auto-save triggered');
+            this.log('Auto-save triggered (30s interval)');
         }, 30000);
     }
 
@@ -193,6 +182,8 @@ class AdventureSheet {
                 mind: parseInt(inputs[2].value) || 0
             };
         });
+
+        this.log('Data collected');
     }
 
     populateForm() {
@@ -211,6 +202,8 @@ class AdventureSheet {
             inputs[1].value = this.data.battles[index].skill;
             inputs[2].value = this.data.battles[index].mind;
         });
+
+        this.log('Form populated');
     }
 
     reset() {
@@ -276,53 +269,56 @@ class AdventureSheet {
     }
 }
 
+// Global instance
+let adventureSheetInstance = null;
+
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    new AdventureSheet();
+    adventureSheetInstance = new AdventureSheet();
 });
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
     if (e.ctrlKey && e.key === 's') {
         e.preventDefault();
-        document.getElementById('saveBtn').click();
+        document.getElementById('saveBtn')?.click();
     }
 
     if (e.ctrlKey && e.key === 'l') {
         e.preventDefault();
-        document.getElementById('loadBtn').click();
+        document.getElementById('loadBtn')?.click();
     }
 
     if (e.ctrlKey && e.key === 'e') {
         e.preventDefault();
-        document.getElementById('exportBtn').click();
+        document.getElementById('exportBtn')?.click();
     }
 
     if (e.ctrlKey && e.key === 'i') {
         e.preventDefault();
-        document.getElementById('importBtn').click();
+        document.getElementById('importBtn')?.click();
     }
 
     if (e.ctrlKey && e.key === 'g') {
         e.preventDefault();
-        document.getElementById('charGenBtn').click();
+        document.getElementById('charGenBtn')?.click();
     }
 
     if (e.ctrlKey && e.key === 'd') {
         e.preventDefault();
-        document.getElementById('diceBtn').click();
+        document.getElementById('diceBtn')?.click();
     }
 
     if (e.ctrlKey && e.key === 'h') {
         e.preventDefault();
-        document.getElementById('helpBtn').click();
+        document.getElementById('helpBtn')?.click();
     }
 });
 
 // Save before page close
-window.addEventListener('beforeunload', (e) => {
-    if (window.adventureSheet) {
-        window.adventureSheet.collectData();
-        window.adventureSheet.storageManager.save(window.adventureSheet.data);
+window.addEventListener('beforeunload', () => {
+    if (adventureSheetInstance) {
+        adventureSheetInstance.collectData();
+        adventureSheetInstance.storageManager.save(adventureSheetInstance.data);
     }
 });
