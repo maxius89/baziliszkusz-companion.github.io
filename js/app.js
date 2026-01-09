@@ -5,6 +5,8 @@ import { CharacterGenerator } from './chargen.js';
 
 class AdventureSheet {
     constructor() {
+        this.DEBUG = false;
+
         // Initialize managers
         this.storageManager = new StorageManager('kalandlap_data');
         this.diceRoller = new DiceRoller(this);
@@ -22,9 +24,6 @@ class AdventureSheet {
         this.populateForm();
         this.bindEvents();
         this.setupAutoSave();
-        
-        // Make globally accessible for onclick handlers
-        window.adventureSheet = this;
     }
 
     initializeData() {
@@ -43,6 +42,12 @@ class AdventureSheet {
                 mind: 0
             }))
         };
+    }
+
+    log(message) {
+        if (this.DEBUG) {
+            console.log(`[Kalandlap] ${message}`);
+        }
     }
 
     generateBattleCards() {
@@ -171,7 +176,7 @@ class AdventureSheet {
         setInterval(() => {
             this.collectData();
             this.storageManager.save(this.data);
-            console.log('Auto-save triggered');
+            this.log('Auto-save triggered');
         }, 30000);
     }
 
@@ -239,96 +244,113 @@ class AdventureSheet {
 
         const modal = document.createElement('div');
         modal.className = 'help-modal';
-        modal.innerHTML = `
-            <div class="help-content">
-                <button class="help-close" onclick="this.parentElement.parentElement.remove()">✕</button>
-                <h2>SÚGÓ</h2>
-                
-                <h3>Billentyűparancsok</h3>
-                <div class="help-shortcuts">
-                    <div class="shortcut-item">
-                        <span class="shortcut-key">Ctrl + S</span>
-                        <span class="shortcut-desc">Kalandlap mentése</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span class="shortcut-key">Ctrl + L</span>
-                        <span class="shortcut-desc">Kalandlap betöltése</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span class="shortcut-key">Ctrl + E</span>
-                        <span class="shortcut-desc">Exportálás fájlba</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span class="shortcut-key">Ctrl + I</span>
-                        <span class="shortcut-desc">Importálás fájlból</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span class="shortcut-key">Ctrl + G</span>
-                        <span class="shortcut-desc">Karakter generálás</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span class="shortcut-key">Ctrl + D</span>
-                        <span class="shortcut-desc">Kockadobó megnyitása</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span class="shortcut-key">Ctrl + H</span>
-                        <span class="shortcut-desc">Súgó megjelenítése</span>
-                    </div>
-                </div>
-                
-                <h3>Funkciók</h3>
-                <ul class="help-features">
-                    <li><strong>Automatikus mentés:</strong> Az adatok 30 másodpercenként automatikusan mentésre kerülnek</li>
-                    <li><strong>Helyi tárolás:</strong> Az adatok a böngésző helyi tárhelyén kerülnek mentésre</li>
-                    <li><strong>Export/Import:</strong> JSON fájlba mentheted és onnan visszatöltheted az adatokat</li>
-                    <li><strong>Kockadobó:</strong> 1D6, 2D6 dobása és harc dobás 2D6 vs 2D6</li>
-                    <li><strong>Ellenfél követés:</strong> 9 ellenfél statisztikáinak nyomon követése</li>
-                </ul>
-                
-                <h3>Karakter Generálás</h3>
-                <ul class="help-features">
-                    <li><strong>Alap értékek:</strong> Test: 18, Kecsesség: 7, Elme: 7, Max varázslatok: 1</li>
-                    <li><strong>14 fejlődéspont:</strong> Költhető a karakter fejlesztésére</li>
-                    <li><strong>Test:</strong> +1 = 1 pont (maximum +10)</li>
-                    <li><strong>Kecsesség/Elme:</strong> +1 = 2 pont, +2 = 5 pont, +3 = 9 pont</li>
-                    <li><strong>Max Varázslatok:</strong> +1 = 4 pont, +2 = 8 pont (maximum +2)</li>
-                    <li><strong>Varázslatok:</strong> 6 varázslat közül választhatsz, mindegyiknek van Elme követelménye</li>
-                </ul>
-
-                <h3>Elérhető Varázslatok</h3>
-                <ul class="help-features">
-                    <li><strong>Ragyogás</strong> - Elme követelmény: 6</li>
-                    <li><strong>Gyorsítás</strong> - Elme követelmény: 7</li>
-                    <li><strong>Varázslók végzete</strong> - Elme követelmény: 9</li>
-                    <li><strong>Manatüske</strong> - Elme követelmény: 8</li>
-                    <li><strong>Izomsorvadás</strong> - Elme követelmény: 9</li>
-                    <li><strong>Éterfolyam</strong> - Elme követelmény: 8</li>
-                </ul>
-                
-                <h3>Karakter Alkaszt</h3>
-                <ul class="help-features">
-                    <li><strong>Mágusvadász:</strong> Mágikus lények és varázslók ellen specializálódott harcos</li>
-                                        <li><strong>Szabotőr:</strong> Lopakodás és szabotázs mestere</li>
-                    <li><strong>Véreb:</strong> Nyomkövetés és vadászat szakértője</li>
-                </ul>
-                
-                <h3>Karakter Múlt</h3>
-                <ul class="help-features">
-                    <li><strong>Egy nagyhatalmú mágus testőre:</strong> Elit harcos háttér</li>
-                    <li><strong>A Birodalom ellenségeinek ostora:</strong> Katonai veterán</li>
-                    <li><strong>Magiko-technikus kísérletek túlélője:</strong> Mágikus kísérlet áldozata</li>
-                </ul>
-            </div>
-        `;
+        modal.innerHTML = this.getHelpHTML();
         
         document.body.appendChild(modal);
         
+        // Close button
+        modal.querySelector('.help-close').addEventListener('click', () => {
+            modal.remove();
+        });
+        
+        // Close on background click
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.remove();
             }
         });
     }
+
+    getHelpHTML() {
+        return `
+            <div class="help-content">
+                <button class="help-close">✕</button>
+                <h2>SÚGÓ</h2>
+                
+                <!-- rest of help content stays the same -->
+                ${this.getHelpContent()}
+            </div>
+        `;
+    }
+
+    getHelpContent() {
+    return `
+            <h3>Billentyűparancsok</h3>
+            <div class="help-shortcuts">
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + S</span>
+                    <span class="shortcut-desc">Kalandlap mentése</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + L</span>
+                    <span class="shortcut-desc">Kalandlap betöltése</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + E</span>
+                    <span class="shortcut-desc">Exportálás fájlba</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + I</span>
+                    <span class="shortcut-desc">Importálás fájlból</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + G</span>
+                    <span class="shortcut-desc">Karakter generálás</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + D</span>
+                    <span class="shortcut-desc">Kockadobó megnyitása</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + H</span>
+                    <span class="shortcut-desc">Súgó megjelenítése</span>
+                </div>
+            </div>
+            
+            <h3>Funkciók</h3>
+            <ul class="help-features">
+                <li><strong>Automatikus mentés:</strong> Az adatok 30 másodpercenként automatikusan mentésre kerülnek</li>
+                <li><strong>Helyi tárolás:</strong> Az adatok a böngésző helyi tárhelyén kerülnek mentésre</li>
+                <li><strong>Export/Import:</strong> JSON fájlba mentheted és onnan visszatöltheted az adatokat</li>
+                <li><strong>Kockadobó:</strong> 1D6, 2D6 dobása és harc dobás 2D6 vs 2D6</li>
+                <li><strong>Ellenfél követés:</strong> 9 ellenfél statisztikáinak nyomon követése</li>
+            </ul>
+            
+            <h3>Karakter Generálás</h3>
+            <ul class="help-features">
+                <li><strong>Alap értékek:</strong> Test: 18, Kecsesség: 7, Elme: 7, Max varázslatok: 1</li>
+                <li><strong>14 fejlődéspont:</strong> Költhető a karakter fejlesztésére</li>
+                <li><strong>Test:</strong> +1 = 1 pont (maximum +10)</li>
+                <li><strong>Kecsesség/Elme:</strong> +1 = 2 pont, +2 = 5 pont, +3 = 9 pont</li>
+                <li><strong>Max Varázslatok:</strong> +1 = 4 pont, +2 = 8 pont (maximum +2)</li>
+                <li><strong>Varázslatok:</strong> 6 varázslat közül választhatsz, mindegyiknek van Elme követelménye</li>
+            </ul>
+
+            <h3>Elérhető Varázslatok</h3>
+            <ul class="help-features">
+                <li><strong>Ragyogás</strong> - Elme követelmény: 6</li>
+                <li><strong>Gyorsítás</strong> - Elme követelmény: 7</li>
+                <li><strong>Varázslók végzete</strong> - Elme követelmény: 9</li>
+                <li><strong>Manatüske</strong> - Elme követelmény: 8</li>
+                <li><strong>Izomsorvadás</strong> - Elme követelmény: 9</li>
+                <li><strong>Éterfolyam</strong> - Elme követelmény: 8</li>
+            </ul>
+            
+            <h3>Karakter Alkaszt</h3>
+            <ul class="help-features">
+                <li><strong>Mágusvadász:</strong> Mágikus lények és varázslók ellen specializálódott harcos</li>
+                                    <li><strong>Szabotőr:</strong> Lopakodás és szabotázs mestere</li>
+                <li><strong>Véreb:</strong> Nyomkövetés és vadászat szakértője</li>
+            </ul>
+            
+            <h3>Karakter Múlt</h3>
+            <ul class="help-features">
+                <li><strong>Egy nagyhatalmú mágus testőre:</strong> Elit harcos háttér</li>
+                <li><strong>A Birodalom ellenségeinek ostora:</strong> Katonai veterán</li>
+                <li><strong>Magiko-technikus kísérletek túlélője:</strong> Mágikus kísérlet áldozata</li>
+            </ul>
+    `;
+}
 
     showNotification(message) {
         const existing = document.querySelector('.notification');
@@ -350,7 +372,7 @@ class AdventureSheet {
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     new AdventureSheet();
-    console.log('Kalandlap Adventure Companion loaded!');
+    this.log('Kalandlap Adventure Companion loaded!');
 });
 
 // Keyboard shortcuts

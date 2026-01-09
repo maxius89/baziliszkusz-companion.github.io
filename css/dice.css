@@ -1,64 +1,19 @@
 /* ============================================
-   DICE ROLLER SIDEBAR
+   DICE ROLLER SIDEBAR (extends .sidebar)
    ============================================ */
 
 .dice-roller-sidebar {
-  position: fixed;
-  top: 0;
   right: -400px;
   width: 400px;
-  height: 100vh;
-  background: #f5f3e8;
   border-left: 4px solid #1a1a1a;
   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
-  z-index: 2000;
-  transition: right 0.3s ease;
-  overflow-y: auto;
 }
 
 .dice-roller-sidebar.open {
   right: 0;
 }
 
-.dice-roller-content {
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-}
-
-.dice-close {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: transparent;
-  border: 3px solid #1a1a1a;
-  color: #1a1a1a;
-  font-size: 1.5rem;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.2s ease;
-}
-
-.dice-close:hover {
-  background: #1a1a1a;
-  color: #f5f3e8;
-}
-
-.dice-roller-content h2 {
-  text-align: center;
-  font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 2rem;
-  letter-spacing: 6px;
-  color: #1a1a1a;
-  margin-bottom: 25px;
-  margin-top: 10px;
-  border-bottom: 3px solid #1a1a1a;
-  padding-bottom: 15px;
-}
-
+/* Dice specific styles only */
 .dice-section {
   margin-bottom: 25px;
 }
@@ -147,7 +102,6 @@
   box-shadow: 1px 1px 0 #1a1a1a;
 }
 
-/* Battle rolls */
 .battle-rolls {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -189,7 +143,6 @@
   animation: roll 0.3s ease;
 }
 
-/* Dice history */
 .dice-history {
   border-top: 3px solid #1a1a1a;
   padding-top: 20px;
@@ -261,29 +214,6 @@
   margin-left: auto;
 }
 
-/* Scrollbars */
-.history-items::-webkit-scrollbar,
-.dice-roller-content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.history-items::-webkit-scrollbar-track,
-.dice-roller-content::-webkit-scrollbar-track {
-  background: #f5f3e8;
-}
-
-.history-items::-webkit-scrollbar-thumb,
-.dice-roller-content::-webkit-scrollbar-thumb {
-  background: #1a1a1a;
-  border: 1px solid #f5f3e8;
-}
-
-.history-items::-webkit-scrollbar-thumb:hover,
-.dice-roller-content::-webkit-scrollbar-thumb:hover {
-  background: #3a3a3a;
-}
-
-/* Responsive */
 @media (max-width: 768px) {
   .dice-roller-sidebar {
     right: -100%;

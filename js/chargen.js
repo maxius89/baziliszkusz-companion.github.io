@@ -12,29 +12,33 @@ export class CharacterGenerator {
         ];
     }
 
-    show() {
-        let sidebar = document.querySelector('.chargen-sidebar');
-        
-        if (sidebar) {
-            sidebar.classList.toggle('open');
-            return;
-        }
-
-        sidebar = document.createElement('div');
-        sidebar.className = 'chargen-sidebar';
-        sidebar.innerHTML = this.getHTML();
-        
-        document.body.appendChild(sidebar);
-        
-        this.init();
-        
-        setTimeout(() => sidebar.classList.add('open'), 10);
+show() {
+    let sidebar = document.querySelector('.chargen-sidebar');
+    
+    if (sidebar) {
+        sidebar.classList.toggle('open');
+        return;
     }
+
+    sidebar = document.createElement('div');
+    sidebar.className = 'chargen-sidebar';
+    sidebar.innerHTML = this.getHTML();
+    
+    document.body.appendChild(sidebar);
+
+    sidebar.querySelector('#chargenClose').addEventListener('click', () => {
+        sidebar.classList.remove('open');
+    });
+    
+    this.init();
+    
+    setTimeout(() => sidebar.classList.add('open'), 10);
+}
 
     getHTML() {
         return `
             <div class="chargen-content">
-                <button class="chargen-close" onclick="document.querySelector('.chargen-sidebar').classList.remove('open')">✕</button>
+                <button class="chargen-close" id="chargenClose">✕</button>
                 <h2>KARAKTER GENER&#193;L&#193;S</h2>
                 
                 <div class="chargen-info">
