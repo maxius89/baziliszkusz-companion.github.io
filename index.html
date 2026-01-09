@@ -50,23 +50,25 @@
                     <div class="form-group">
                         <label for="occasion">ALKASZT:</label>
                         <select id="occasion" aria-label="Válassz alkasztot">
-                            <option value="">-- V&#193;LASSZ --</option>
-                            <option value="magusvadasz">M&#225;gusvad&#225;sz</option>
-                            <option value="szabotor">Szabot&#337;r</option>
-                            <option value="vereb">V&#233;reb</option>
+                            <option value="">-- VÁLASSZ --</option>
+                            <option value="magusvadasz">Mágusvadász</option>
+                            <option value="szabotor">Szabotőr</option>
+                            <option value="vereb">Véreb</option>
                         </select>
+                        <div class="field-bonus" id="occasionBonus"></div>
                     </div>
 
                     <div class="divider"></div>
 
                     <div class="form-group">
-                        <label for="past">M&#218;LT:</label>
+                        <label for="past">MÚLT:</label>
                         <select id="past" aria-label="Válassz múltat">
-                            <option value="">-- V&#193;LASSZ --</option>
+                            <option value="">-- VÁLASSZ --</option>
                             <option value="testor">Egy nagyhatalmú mágus testőre</option>
                             <option value="ostora">A Birodalom ellenségeinek ostora</option>
                             <option value="tulelo">Magiko-technikus kísérletek túlélője</option>
                         </select>
+                        <div class="field-bonus" id="pastBonus"></div>
                     </div>
                 </section>
 
@@ -170,6 +172,7 @@
                 <strong>14 fejlődéspont</strong> áll rendelkezésre.
             </div>
 
+            <!-- Points Display -->
             <div class="chargen-section">
                 <div class="points-display">
                     <div class="points-remaining" id="pointsRemaining">14</div>
@@ -177,6 +180,7 @@
                 </div>
             </div>
 
+            <!-- Stats (TEST, KECSESSÉG, ELME, MAX VARÁZSLATOK) -->
             <div class="chargen-section">
                 <div class="stat-row">
                     <div class="stat-header">
@@ -215,6 +219,7 @@
                 </div>
             </div>
 
+            <!-- Spell Selection -->
             <div class="chargen-section">
                 <div class="spell-selection">
                     <h4>VARÁZSLAT VÁLASZTÁS</h4>
@@ -225,6 +230,35 @@
                 </div>
             </div>
 
+            <!-- Class Selection -->
+            <div class="chargen-section">
+                <div class="class-background-selection">
+                    <h3>ALKASZT</h3>
+                    <select id="classSelect" class="class-select">
+                        <option value="">-- VÁLASSZ --</option>
+                        <option value="magusvadasz">Mágusvadász</option>
+                        <option value="szabotor">Szabotőr</option>
+                        <option value="vereb">Véreb</option>
+                    </select>
+                    <div class="bonus-display" id="classBonus" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Background Selection -->
+            <div class="chargen-section">
+                <div class="class-background-selection">
+                    <h3>MÚLT</h3>
+                    <select id="backgroundSelect" class="background-select">
+                        <option value="">-- VÁLASSZ --</option>
+                        <option value="testor">Egy nagyhatalmú mágus testőre</option>
+                        <option value="ostora">A Birodalom ellenségeinek ostora</option>
+                        <option value="tulelo">Magiko-technikus kísérletek túlélője</option>
+                    </select>
+                    <div class="bonus-display" id="backgroundBonus" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Actions -->
             <div class="chargen-actions">
                 <button class="action-btn primary" id="applyCharGen">
                     &#10004; ALKALMAZ

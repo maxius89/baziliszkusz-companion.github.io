@@ -1,15 +1,13 @@
+import { CLASSES, BACKGROUNDS, SPELLS } from './config.js';
+
 // Character generator module
 export class CharacterGenerator {
     constructor(adventureSheet) {
         this.adventureSheet = adventureSheet;
-        this.availableSpells = [
-            { name: 'Ragyog&#225;s', nameText: 'Ragyogás', mindReq: 6 },
-            { name: 'Gyors&#237;t&#225;s', nameText: 'Gyorsítás', mindReq: 7 },
-            { name: 'Var&#225;zsl&#243;k v&#233;gzete', nameText: 'Varázslók végzete', mindReq: 9 },
-            { name: 'Manat&#252;ske', nameText: 'Manatüske', mindReq: 8 },
-            { name: 'Izomsorvad&#225;s', nameText: 'Izomsorvadás', mindReq: 9 },
-            { name: '&#201;terfolyam', nameText: 'Éterfolyam', mindReq: 8 }
-        ];
+        this.classes = CLASSES;
+        this.backgrounds = BACKGROUNDS;
+        this.spells = SPELLS;
+        this.spellKeys = Object.keys(SPELLS);
     }
 
     show() {
@@ -53,15 +51,71 @@ export class CharacterGenerator {
                 mind: 0,
                 spells: 0
             },
-            selectedSpells: []
+            selectedSpells: [],
+            selectedClass: '',
+            selectedBackground: ''
         };
 
+        this.setupClassAndBackgroundListeners();
         this.setupControls();
         this.renderSpellList();
         this.updateDisplay();
 
         document.getElementById('applyCharGen').addEventListener('click', () => this.apply());
         document.getElementById('resetCharGen').addEventListener('click', () => this.reset());
+    }
+
+    setupClassAndBackgroundListeners() {
+        document.getElementById('classSelect').addEventListener('change', (e) => {
+            this.data.selectedClass = e.target.value;
+            this.updateClassBonus();
+
+            const maxSpells = this.getTotalMaxSpells();
+            if (this.data.selectedSpells.length > maxSpells) {
+                this.data.selectedSpells = this.data.selectedSpells.slice(0, maxSpells);
+            }
+
+            this.renderSpellList();
+
+            const selectedCount = this.data.selectedSpells.length;
+            document.getElementById('selectedSpellCount').textContent = String(selectedCount);
+            document.getElementById('maxSpellCount').textContent = String(maxSpells);
+        });
+
+        document.getElementById('backgroundSelect').addEventListener('change', (e) => {
+            this.data.selectedBackground = e.target.value;
+            this.updateBackgroundBonus();
+        });
+    }
+
+    updateClassBonus() {
+        const bonusElement = document.getElementById('classBonus');
+        if (this.data.selectedClass && this.classes[this.data.selectedClass]) {
+            bonusElement.textContent = this.classes[this.data.selectedClass].bonus;
+            bonusElement.style.display = 'block';
+        } else {
+            bonusElement.style.display = 'none';
+        }
+    }
+
+    updateBackgroundBonus() {
+        const bonusElement = document.getElementById('backgroundBonus');
+        if (this.data.selectedBackground && this.backgrounds[this.data.selectedBackground]) {
+            bonusElement.textContent = `${this.backgrounds[this.data.selectedBackground].bonus}`;
+            bonusElement.style.display = 'block';
+        } else {
+            bonusElement.style.display = 'none';
+        }
+    }
+
+    getTotalMaxSpells() {
+        let maxSpells = 1 + this.data.selections.spells;
+
+        if (this.data.selectedClass === 'magusvadasz') {
+            maxSpells += this.classes.magusvadasz.effect.value;
+        }
+
+        return maxSpells;
     }
 
     setupControls() {
@@ -129,10 +183,10 @@ export class CharacterGenerator {
 
         if (stat === 'mind' || stat === 'spells') {
             const currentMind = 7 + this.data.selections.mind;
-            const maxSpells = 1 + this.data.selections.spells;
+            const maxSpells = this.getTotalMaxSpells();
 
-            this.data.selectedSpells = this.data.selectedSpells.filter(spellIndex => {
-                return this.availableSpells[spellIndex].mindReq <= currentMind;
+            this.data.selectedSpells = this.data.selectedSpells.filter(spellKey => {
+                return this.spells[spellKey].mindReq <= currentMind;
             });
 
             if (this.data.selectedSpells.length > maxSpells) {
@@ -193,7 +247,7 @@ export class CharacterGenerator {
         this.updateSpellCounter();
 
         const applyBtn = document.getElementById('applyCharGen');
-        const maxSpells = 1 + this.data.selections.spells;
+        const maxSpells = this.getTotalMaxSpells();
         const selectedCount = this.data.selectedSpells.length;
         applyBtn.disabled = remaining < 0 || selectedCount > maxSpells;
     }
@@ -227,26 +281,32 @@ export class CharacterGenerator {
 
     renderSpellList() {
         const spellList = document.getElementById('spellList');
+        if (!spellList) {
+            console.warn('Spell list element not found');
+            return;
+        }
+
         spellList.innerHTML = '';
 
         const currentMind = 7 + this.data.selections.mind;
         const template = document.getElementById('spell-item-template');
 
-        this.availableSpells.forEach((spell, index) => {
+        this.spellKeys.forEach((spellKey) => {
+            const spell = this.spells[spellKey];
             const spellItem = template.content.cloneNode(true);
             const container = spellItem.querySelector('.spell-item');
 
-            const isSelected = this.data.selectedSpells.includes(index);
+            const isSelected = this.data.selectedSpells.includes(spellKey);
             const canSelect = currentMind >= spell.mindReq;
 
             if (isSelected) container.classList.add('selected');
             if (!canSelect) container.classList.add('disabled');
 
-            spellItem.querySelector('[data-spell-name]').innerHTML = spell.name;
+            spellItem.querySelector('[data-spell-name]').textContent = spell.nameText;
             spellItem.querySelector('[data-spell-req]').textContent = `(Elme: ${spell.mindReq})`;
 
             if (canSelect) {
-                container.addEventListener('click', () => this.toggleSpell(index));
+                container.addEventListener('click', () => this.toggleSpell(spellKey));
             }
 
             spellList.appendChild(spellItem);
@@ -255,9 +315,9 @@ export class CharacterGenerator {
         this.updateSpellCounter();
     }
 
-    toggleSpell(spellIndex) {
-        const maxSpells = 1 + this.data.selections.spells;
-        const currentIndex = this.data.selectedSpells.indexOf(spellIndex);
+    toggleSpell(spellKey) {
+        const maxSpells = this.getTotalMaxSpells();
+        const currentIndex = this.data.selectedSpells.indexOf(spellKey);
 
         if (currentIndex > -1) {
             this.data.selectedSpells.splice(currentIndex, 1);
@@ -266,20 +326,28 @@ export class CharacterGenerator {
                 this.adventureSheet.showNotification('MAXIMUM VARÁZSLAT ELÉRVE! ✗');
                 return;
             }
-            this.data.selectedSpells.push(spellIndex);
+            this.data.selectedSpells.push(spellKey);
         }
 
         this.renderSpellList();
     }
 
     updateSpellCounter() {
-        const maxSpells = 1 + this.data.selections.spells;
+        const maxSpells = this.getTotalMaxSpells();
         const selectedCount = this.data.selectedSpells.length;
 
-        document.getElementById('selectedSpellCount').textContent = selectedCount;
-        document.getElementById('maxSpellCount').textContent = maxSpells;
-
+        const selectedCountElement = document.getElementById('selectedSpellCount');
+        const maxSpellCountElement = document.getElementById('maxSpellCount');
         const counter = document.getElementById('spellCounter');
+
+        if (!selectedCountElement || !maxSpellCountElement || !counter) {
+            console.warn('Spell counter elements not found');
+            return;
+        }
+
+        selectedCountElement.textContent = String(selectedCount);
+        maxSpellCountElement.textContent = String(maxSpells);
+
         if (selectedCount > maxSpells) {
             counter.classList.add('warning');
         } else {
@@ -291,40 +359,90 @@ export class CharacterGenerator {
         this.data.selections = { test: 0, skill: 0, mind: 0, spells: 0 };
         this.data.pointsSpent = 0;
         this.data.selectedSpells = [];
+        this.data.selectedClass = '';
+        this.data.selectedBackground = '';
+
+        document.getElementById('classSelect').value = '';
+        document.getElementById('backgroundSelect').value = '';
+
+        this.updateClassBonus();
+        this.updateBackgroundBonus();
         this.renderSpellList();
         this.updateDisplay();
+
         this.adventureSheet.showNotification('KARAKTER VISSZAÁLLÍTVA! ✓');
     }
 
     apply() {
-        const maxSpells = 1 + this.data.selections.spells;
+        const maxSpells = this.getTotalMaxSpells();
         if (this.data.selectedSpells.length > maxSpells) {
             this.adventureSheet.showNotification('TÚL SOK VARÁZSLAT KIVÁLASZTVA! ✗');
             return;
         }
 
-        // Apply stats
-        this.adventureSheet.data.test = 18 + this.data.selections.test;
-        this.adventureSheet.data.skill = 7 + this.data.selections.skill;
-        this.adventureSheet.data.mind = 7 + this.data.selections.mind;
+        // Validate selections
+        if (!this.data.selectedClass) {
+            this.adventureSheet.showNotification('VÁLASSZ ALKASZTOT! ✗');
+            return;
+        }
 
-        // Update form
-        document.getElementById('test').value = this.adventureSheet.data.test;
-        document.getElementById('skill').value = this.adventureSheet.data.skill;
-        document.getElementById('mind').value = this.adventureSheet.data.mind;
+        if (!this.data.selectedBackground) {
+            this.adventureSheet.showNotification('VÁLASSZ MÚLTAT! ✗');
+            return;
+        }
+
+        // Apply base stats
+        let finalTest = 18 + this.data.selections.test;
+        let finalSkill = 7 + this.data.selections.skill;
+        let finalMind = 7 + this.data.selections.mind;
+
+        // Apply class bonuses
+        const classEffect = this.classes[this.data.selectedClass].effect;
+        if (classEffect.type === 'test') {
+            finalTest += classEffect.value;
+        } else if (classEffect.type === 'skill') {
+            finalSkill += classEffect.value;
+        }
+
+        // Update main form
+        this.adventureSheet.data.test = finalTest;
+        this.adventureSheet.data.skill = finalSkill;
+        this.adventureSheet.data.mind = finalMind;
+        this.adventureSheet.data.occasion = this.data.selectedClass;
+        this.adventureSheet.data.past = this.data.selectedBackground;
+
+        document.getElementById('test').value = finalTest;
+        document.getElementById('skill').value = finalSkill;
+        document.getElementById('mind').value = finalMind;
+        document.getElementById('occasion').value = this.data.selectedClass;
+        document.getElementById('past').value = this.data.selectedBackground;
+
+        // Update bonus displays on main sheet
+        this.adventureSheet.updateClassBonus();
+        this.adventureSheet.updateBackgroundBonus();
 
         // Build spell list
         let spellsText = '';
         if (this.data.selectedSpells.length > 0) {
-            const selectedSpellNames = this.data.selectedSpells.map(index =>
-                this.availableSpells[index].nameText
+            const selectedSpellNames = this.data.selectedSpells.map(spellKey =>
+                this.spells[spellKey].nameText
             );
             spellsText = selectedSpellNames.join('\n');
         }
 
-        // Update spells textarea
         this.adventureSheet.data.spells = spellsText;
         document.getElementById('spells').value = spellsText;
+
+        // Apply background bonuses to equipment
+        const bgEffect = this.backgrounds[this.data.selectedBackground].effect;
+
+        if (bgEffect.type === 'equipment') {
+            this.adventureSheet.data.equipment = bgEffect.value;
+            document.getElementById('equipment').value = bgEffect.value;
+        } else {
+            this.adventureSheet.data.equipment = '';
+            document.getElementById('equipment').value = '';
+        }
 
         // Save
         this.adventureSheet.storageManager.save(this.adventureSheet.data);

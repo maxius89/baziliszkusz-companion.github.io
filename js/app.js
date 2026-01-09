@@ -2,6 +2,7 @@
 import { StorageManager } from './storage.js';
 import { DiceRoller } from './dice.js';
 import { CharacterGenerator } from './chargen.js';
+import { CLASSES, BACKGROUNDS } from './config.js';
 
 class AdventureSheet {
     constructor() {
@@ -154,6 +155,18 @@ class AdventureSheet {
                 this.showNotification('KALANDLAP VISSZAÁLLÍTVA! ✓');
             }
         });
+
+        // Update bonus display when class-selector changes on main sheet
+        document.getElementById('occasion').addEventListener('change', (e) => {
+            this.data.occasion = e.target.value;
+            this.updateClassBonus();
+        });
+
+        // Update bonus display when background-selector changes on main sheet
+        document.getElementById('past').addEventListener('change', (e) => {
+            this.data.past = e.target.value;
+            this.updateBackgroundBonus();
+        });
     }
 
     setupAutoSave() {
@@ -196,6 +209,9 @@ class AdventureSheet {
         document.getElementById('spells').value = this.data.spells;
         document.getElementById('notes').value = this.data.notes;
 
+        this.updateClassBonus();
+        this.updateBackgroundBonus();
+
         document.querySelectorAll('.battle-card').forEach((card, index) => {
             const inputs = card.querySelectorAll('input[type="number"]');
             inputs[0].value = this.data.battles[index].test;
@@ -204,6 +220,24 @@ class AdventureSheet {
         });
 
         this.log('Form populated');
+    }
+
+    updateClassBonus() {
+        const occasionBonus = document.getElementById('occasionBonus');
+        if (this.data.occasion && CLASSES[this.data.occasion]) {
+            occasionBonus.textContent = `${CLASSES[this.data.occasion].bonus}`;
+        } else {
+            occasionBonus.textContent = '';
+        }
+    }
+
+    updateBackgroundBonus() {
+        const pastBonus = document.getElementById('pastBonus');
+        if (this.data.past && BACKGROUNDS[this.data.past]) {
+            pastBonus.textContent = `${BACKGROUNDS[this.data.past].bonus}`;
+        } else {
+            pastBonus.textContent = '';
+        }
     }
 
     reset() {

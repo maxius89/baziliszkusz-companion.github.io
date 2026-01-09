@@ -286,6 +286,50 @@
   font-weight: bold;
 }
 
+/* Class and Background Selection */
+.class-background-selection {
+    background: #ffffff;
+    border: 2px solid #1a1a1a;
+    padding: 15px;
+}
+
+.class-background-selection h3 {
+    font-family: 'Bebas Neue', Arial, sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+    text-align: center;
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 8px;
+}
+
+.class-select,
+.background-select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #1a1a1a;
+    background: #f9f9f9;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #1a1a1a;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.bonus-display {
+    background: #fffef0;
+    border: 2px solid #1a1a1a;
+    padding: 10px;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 0.85rem;
+    color: #1a1a1a;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
 @media (max-width: 768px) {
   .chargen-sidebar {
     left: -100%;
