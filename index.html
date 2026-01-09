@@ -117,6 +117,211 @@
         </main>
     </div>
 
+    <!-- Templates (hidden) -->
+    <template id="dice-roller-template">
+        <div class="dice-roller-content sidebar-content custom-scrollbar">
+            <button class="sidebar-close" id="diceClose">✕</button>
+            <h2>KOCKADOBÁS</h2>
+
+            <div class="dice-section">
+                <h3>Egyszerű dobás</h3>
+                <div class="dice-result" id="diceResult">
+                    <span class="result-number">?</span>
+                </div>
+                <div class="dice-buttons">
+                    <button class="dice-btn" id="roll1d6">1D6</button>
+                    <button class="dice-btn" id="roll2d6">2D6</button>
+                </div>
+            </div>
+
+            <div class="dice-section">
+                <h3>Harc dobás</h3>
+                <div class="battle-rolls">
+                    <div class="battle-roll">
+                        <h4>JÁTÉKOS</h4>
+                        <div class="battle-result" id="attackerRoll">?</div>
+                    </div>
+                    <div class="battle-roll">
+                        <h4>ELLENFÉL</h4>
+                        <div class="battle-result" id="defenderRoll">?</div>
+                    </div>
+                </div>
+                <div class="dice-buttons">
+                    <button class="dice-btn" id="rollBattle">HARC DOBÁS</button>
+                </div>
+            </div>
+
+            <div class="dice-history" id="diceHistory">
+                <h3>TÖRTÉNET</h3>
+                <div class="history-items"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="chargen-template">
+        <div class="chargen-content sidebar-content custom-scrollbar">
+            <button class="sidebar-close" id="chargenClose">✕</button>
+            <h2>KARAKTER GENERÁLÁS</h2>
+
+            <div class="chargen-info">
+                <strong>Alap értékek:</strong><br>
+                Test: 18 | Kecseség: 7 | Elme: 7<br>
+                Max varázslatok: 1<br><br>
+                <strong>14 fejlődéspont</strong> áll rendelkezésre.
+            </div>
+
+            <div class="chargen-section">
+                <div class="points-display">
+                    <div class="points-remaining" id="pointsRemaining">14</div>
+                    <div class="points-label">Fejlődéspont</div>
+                </div>
+            </div>
+
+            <div class="chargen-section">
+                <div class="stat-row">
+                    <div class="stat-header">
+                        <span class="stat-name">TEST</span>
+                        <span class="stat-value" id="genTest">18</span>
+                    </div>
+                    <div class="stat-controls" id="testControls"></div>
+                    <div class="stat-cost">+1 = 1 pont (max +10)</div>
+                </div>
+
+                <div class="stat-row">
+                    <div class="stat-header">
+                        <span class="stat-name">KECSESÉG</span>
+                        <span class="stat-value" id="genSkill">7</span>
+                    </div>
+                    <div class="stat-controls" id="skillControls"></div>
+                    <div class="stat-cost">+1 = 2 pont | +2 = 5 pont | +3 = 9 pont</div>
+                </div>
+
+                <div class="stat-row">
+                    <div class="stat-header">
+                        <span class="stat-name">ELME</span>
+                        <span class="stat-value" id="genMind">7</span>
+                    </div>
+                    <div class="stat-controls" id="mindControls"></div>
+                    <div class="stat-cost">+1 = 2 pont | +2 = 5 pont | +3 = 9 pont</div>
+                </div>
+
+                <div class="stat-row">
+                    <div class="stat-header">
+                        <span class="stat-name">MAX VARÁZSLATOK</span>
+                        <span class="stat-value" id="genSpells">1</span>
+                    </div>
+                    <div class="stat-controls" id="spellsControls"></div>
+                    <div class="stat-cost">+1 = 4 pont | +2 = 8 pont (max +2)</div>
+                </div>
+            </div>
+
+            <div class="chargen-section">
+                <div class="spell-selection">
+                    <h4>VARÁZSLAT VÁLASZTÁS</h4>
+                    <div class="spell-list" id="spellList"></div>
+                    <div class="spell-counter" id="spellCounter">
+                        <span id="selectedSpellCount">0</span> / <span id="maxSpellCount">1</span> varázslat kiválasztva
+                    </div>
+                </div>
+            </div>
+
+            <div class="chargen-actions">
+                <button class="action-btn primary" id="applyCharGen">
+                    &#10004; ALKALMAZ
+                </button>
+                <button class="action-btn" id="resetCharGen">
+                    &#8634; VISSZAÁLLÍT
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <template id="help-modal-template">
+        <div class="help-content">
+            <button class="help-close">✕</button>
+            <h2>SÚGÓ</h2>
+
+            <h3>Billentyűparancsok</h3>
+            <div class="help-shortcuts">
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + S</span>
+                    <span class="shortcut-desc">Kalandlap mentése</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + L</span>
+                    <span class="shortcut-desc">Kalandlap betöltése</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + E</span>
+                    <span class="shortcut-desc">Exportálás fájlba</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + I</span>
+                    <span class="shortcut-desc">Importálás fájlból</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + G</span>
+                    <span class="shortcut-desc">Karakter generálás</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + D</span>
+                    <span class="shortcut-desc">Kockadobó megnyitása</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + H</span>
+                    <span class="shortcut-desc">Súgó megjelenítése</span>
+                </div>
+            </div>
+
+            <h3>Funkciók</h3>
+            <ul class="help-features">
+                <li><strong>Automatikus mentés:</strong> Az adatok 30 másodpercenként automatikusan mentésre kerülnek
+                </li>
+                <li><strong>Helyi tárolás:</strong> Az adatok a böngésző helyi tárhelyén kerülnek mentésre</li>
+                <li><strong>Export/Import:</strong> JSON fájlba mentheted és onnan visszatöltheted az adatokat</li>
+                <li><strong>Kockadobó:</strong> 1D6, 2D6 dobása és harc dobás 2D6 vs 2D6</li>
+                <li><strong>Karakter generálás:</strong> A könyv szabályai alapján</li>
+                <li><strong>Ellenfél követés:</strong> 9 ellenfél statisztikáinak nyomon követése</li>
+            </ul>
+        </div>
+    </template>
+
+    <template id="battle-card-template">
+        <div class="battle-card">
+            <div class="form-group">
+                <label>TEST:</label>
+                <input type="number" min="0" max="99" value="0" data-stat="test">
+            </div>
+            <div class="form-group">
+                <label>KECSESÉG:</label>
+                <input type="number" min="0" max="99" value="0" data-stat="skill">
+            </div>
+            <div class="form-group">
+                <label>ELME:</label>
+                <input type="number" min="0" max="99" value="0" data-stat="mind">
+            </div>
+        </div>
+    </template>
+
+    <template id="spell-item-template">
+        <div class="spell-item">
+            <div class="spell-checkbox"></div>
+            <div class="spell-info">
+                <span class="spell-name" data-spell-name></span>
+                <span class="spell-requirement" data-spell-req></span>
+            </div>
+        </div>
+    </template>
+
+    <template id="history-item-template">
+        <div class="history-item">
+            <span class="history-time" data-time></span>
+            <span class="history-dice" data-dice></span>
+            <span class="history-total" data-total></span>
+            <span class="history-details" data-details></span>
+        </div>
+    </template>
+
     <script type="module" src="js/app.js"></script>
 </body>
 
