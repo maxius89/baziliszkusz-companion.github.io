@@ -5,71 +5,81 @@ export class DiceRoller {
         this.historyKey = 'kalandlap_dice_history';
     }
 
-    show() {
-        let sidebar = document.querySelector('.dice-roller-sidebar');
-        
-        if (sidebar) {
-            sidebar.classList.toggle('open');
-            return;
-        }
-
-        sidebar = document.createElement('div');
-        sidebar.className = 'dice-roller-sidebar';
-        sidebar.innerHTML = this.getHTML();
-        
-        document.body.appendChild(sidebar);
-        
-        setTimeout(() => sidebar.classList.add('open'), 10);
-        this.loadHistory();
+show() {
+    let sidebar = document.querySelector('.dice-roller-sidebar');
+    
+    if (sidebar) {
+        sidebar.classList.toggle('open');
+        return;
     }
 
-    getHTML() {
-        return `
-            <div class="dice-roller-content">
-                <button class="dice-close" onclick="document.querySelector('.dice-roller-sidebar').classList.remove('open')">✕</button>
-                <h2>KOCKADOBÁS</h2>
-                
-                <div class="dice-section">
-                    <h3>Egyszerű dobás</h3>
-                    <div class="dice-result" id="diceResult">
-                        <span class="result-number">?</span>
-                    </div>
-                    <div class="dice-buttons">
-                        <button class="dice-btn" onclick="window.adventureSheet.diceRoller.rollAndShow(1)">
-                            1D6
-                        </button>
-                        <button class="dice-btn" onclick="window.adventureSheet.diceRoller.rollAndShow(2)">
-                            2D6
-                        </button>
-                    </div>
+    sidebar = document.createElement('div');
+    sidebar.className = 'dice-roller-sidebar';
+    sidebar.innerHTML = this.getHTML();
+    
+    document.body.appendChild(sidebar);
+
+    this.bindDiceEvents(sidebar);
+
+    setTimeout(() => sidebar.classList.add('open'), 10);
+    this.loadHistory();
+}
+
+bindDiceEvents(sidebar) {
+    // Close button
+    sidebar.querySelector('#diceClose').addEventListener('click', () => {
+        sidebar.classList.remove('open');
+    });
+    
+    // Simple roll buttons
+    sidebar.querySelector('#roll1d6').addEventListener('click', () => this.rollAndShow(1));
+    sidebar.querySelector('#roll2d6').addEventListener('click', () => this.rollAndShow(2));
+    
+    // Battle roll button
+    sidebar.querySelector('#rollBattle').addEventListener('click', () => this.rollBattle());
+}
+
+getHTML() {
+    return `
+        <div class="dice-roller-content">
+            <button class="dice-close" id="diceClose">✕</button>
+            <h2>KOCKADOBÁS</h2>
+            
+            <div class="dice-section">
+                <h3>Egyszerű dobás</h3>
+                <div class="dice-result" id="diceResult">
+                    <span class="result-number">?</span>
                 </div>
-                
-                <div class="dice-section">
-                    <h3>Harc dobás</h3>
-                    <div class="battle-rolls">
-                        <div class="battle-roll">
-                            <h4>JÁTÉKOS</h4>
-                            <div class="battle-result" id="attackerRoll">?</div>
-                        </div>
-                        <div class="battle-roll">
-                            <h4>ELLENFÉL</h4>
-                            <div class="battle-result" id="defenderRoll">?</div>
-                        </div>
-                    </div>
-                    <div class="dice-buttons">
-                        <button class="dice-btn" onclick="window.adventureSheet.diceRoller.rollBattle()">
-                            HARC DOBÁS
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="dice-history" id="diceHistory">
-                    <h3>TÖRTÉNET</h3>
-                    <div class="history-items"></div>
+                <div class="dice-buttons">
+                    <button class="dice-btn" id="roll1d6">1D6</button>
+                    <button class="dice-btn" id="roll2d6">2D6</button>
                 </div>
             </div>
-        `;
-    }
+            
+            <div class="dice-section">
+                <h3>Harc dobás</h3>
+                <div class="battle-rolls">
+                    <div class="battle-roll">
+                        <h4>JÁTÉKOS</h4>
+                        <div class="battle-result" id="attackerRoll">?</div>
+                    </div>
+                    <div class="battle-roll">
+                        <h4>ELLENFÉL</h4>
+                        <div class="battle-result" id="defenderRoll">?</div>
+                    </div>
+                </div>
+                <div class="dice-buttons">
+                    <button class="dice-btn" id="rollBattle">HARC DOBÁS</button>
+                </div>
+            </div>
+            
+            <div class="dice-history" id="diceHistory">
+                <h3>TÖRTÉNET</h3>
+                <div class="history-items"></div>
+            </div>
+        </div>
+    `;
+}
 
     rollDice(sides = 6) {
         return Math.floor(Math.random() * sides) + 1;

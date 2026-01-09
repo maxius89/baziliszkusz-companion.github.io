@@ -1,64 +1,19 @@
 /* ============================================
-   CHARACTER GENERATOR SIDEBAR
+   CHARACTER GENERATOR SIDEBAR (extends .sidebar)
    ============================================ */
 
 .chargen-sidebar {
-  position: fixed;
-  top: 0;
   left: -450px;
   width: 450px;
-  height: 100vh;
-  background: #f5f3e8;
   border-right: 4px solid #1a1a1a;
   box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5);
-  z-index: 2000;
-  transition: left 0.3s ease;
-  overflow-y: auto;
 }
 
 .chargen-sidebar.open {
   left: 0;
 }
 
-.chargen-content {
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-}
-
-.chargen-close {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: transparent;
-  border: 3px solid #1a1a1a;
-  color: #1a1a1a;
-  font-size: 1.5rem;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.2s ease;
-}
-
-.chargen-close:hover {
-  background: #1a1a1a;
-  color: #f5f3e8;
-}
-
-.chargen-content h2 {
-  text-align: center;
-  font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 2rem;
-  letter-spacing: 6px;
-  color: #1a1a1a;
-  margin-bottom: 25px;
-  margin-top: 10px;
-  border-bottom: 3px solid #1a1a1a;
-  padding-bottom: 15px;
-}
-
+/* Character generator specific styles only */
 .chargen-section {
   margin-bottom: 25px;
 }
@@ -185,41 +140,6 @@
   border-top: 3px solid #1a1a1a;
 }
 
-.chargen-btn {
-  padding: 15px 20px;
-  font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-  border: 3px solid #1a1a1a;
-  background: #ffffff;
-  color: #1a1a1a;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 3px 3px 0 #1a1a1a;
-}
-
-.chargen-btn:hover {
-  background: #e8e8e8;
-  transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 #1a1a1a;
-}
-
-.chargen-btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 #1a1a1a;
-}
-
-.chargen-btn.primary {
-  background: #e8e8e8;
-}
-
-.chargen-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
 .chargen-info {
   background: #fffef0;
   border: 2px solid #1a1a1a;
@@ -235,8 +155,7 @@
   color: #1a1a1a;
 }
 
-/* Spell Selection */
-
+/* Spell selection */
 .spell-selection {
   background: #ffffff;
   border: 2px solid #1a1a1a;
@@ -365,23 +284,6 @@
 .spell-counter.warning {
   color: #c00;
   font-weight: bold;
-}
-
-/* Scrollbar */
-.chargen-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.chargen-content::-webkit-scrollbar-track {
-  background: #f5f3e8;
-}
-
-.chargen-content::-webkit-scrollbar-thumb {
-  background: #1a1a1a;
-}
-
-.chargen-content::-webkit-scrollbar-thumb:hover {
-  background: #3a3a3a;
 }
 
 @media (max-width: 768px) {

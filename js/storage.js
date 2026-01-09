@@ -7,7 +7,6 @@ export class StorageManager {
     save(data) {
         try {
             localStorage.setItem(this.storageKey, JSON.stringify(data));
-            console.log('Data saved to localStorage');
             return true;
         } catch (e) {
             console.error('Failed to save data:', e);
@@ -19,7 +18,6 @@ export class StorageManager {
         try {
             const saved = localStorage.getItem(this.storageKey);
             if (saved) {
-                console.log('Data loaded from localStorage');
                 return JSON.parse(saved);
             }
             return null;
