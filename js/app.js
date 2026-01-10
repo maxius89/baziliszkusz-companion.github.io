@@ -31,16 +31,16 @@ class AdventureSheet {
 
     initializeData() {
         return {
-            test: 0,
+            body: 0,
             skill: 0,
             mind: 0,
-            occasion: '',
+            class: '',
             past: '',
             equipment: '',
             spells: '',
             notes: '',
             battles: Array(9).fill(null).map(() => ({
-                test: 0,
+                body: 0,
                 skill: 0,
                 mind: 0
             }))
@@ -157,8 +157,8 @@ class AdventureSheet {
         });
 
         // Update bonus display when class-selector changes on main sheet
-        document.getElementById('occasion').addEventListener('change', (e) => {
-            this.data.occasion = e.target.value;
+        document.getElementById('class').addEventListener('change', (e) => {
+            this.data.class = e.target.value;
             this.updateClassBonus();
         });
 
@@ -178,10 +178,10 @@ class AdventureSheet {
     }
 
     collectData() {
-        this.data.test = parseInt(document.getElementById('test').value) || 0;
+        this.data.body = parseInt(document.getElementById('body').value) || 0;
         this.data.skill = parseInt(document.getElementById('skill').value) || 0;
         this.data.mind = parseInt(document.getElementById('mind').value) || 0;
-        this.data.occasion = document.getElementById('occasion').value;
+        this.data.class = document.getElementById('class').value;
         this.data.past = document.getElementById('past').value;
         this.data.equipment = document.getElementById('equipment').value;
         this.data.spells = document.getElementById('spells').value;
@@ -190,7 +190,7 @@ class AdventureSheet {
         document.querySelectorAll('.battle-card').forEach((card, index) => {
             const inputs = card.querySelectorAll('input[type="number"]');
             this.data.battles[index] = {
-                test: parseInt(inputs[0].value) || 0,
+                body: parseInt(inputs[0].value) || 0,
                 skill: parseInt(inputs[1].value) || 0,
                 mind: parseInt(inputs[2].value) || 0
             };
@@ -200,10 +200,10 @@ class AdventureSheet {
     }
 
     populateForm() {
-        document.getElementById('test').value = this.data.test;
+        document.getElementById('body').value = this.data.body;
         document.getElementById('skill').value = this.data.skill;
         document.getElementById('mind').value = this.data.mind;
-        document.getElementById('occasion').value = this.data.occasion || '';
+        document.getElementById('class').value = this.data.class || '';
         document.getElementById('past').value = this.data.past || '';
         document.getElementById('equipment').value = this.data.equipment;
         document.getElementById('spells').value = this.data.spells;
@@ -214,7 +214,7 @@ class AdventureSheet {
 
         document.querySelectorAll('.battle-card').forEach((card, index) => {
             const inputs = card.querySelectorAll('input[type="number"]');
-            inputs[0].value = this.data.battles[index].test;
+            inputs[0].value = this.data.battles[index].body;
             inputs[1].value = this.data.battles[index].skill;
             inputs[2].value = this.data.battles[index].mind;
         });
@@ -223,11 +223,11 @@ class AdventureSheet {
     }
 
     updateClassBonus() {
-        const occasionBonus = document.getElementById('occasionBonus');
-        if (this.data.occasion && CLASSES[this.data.occasion]) {
-            occasionBonus.textContent = `${CLASSES[this.data.occasion].bonus}`;
+        const classBonus = document.getElementById('classBonus');
+        if (this.data.class && CLASSES[this.data.class]) {
+            classBonus.textContent = `${CLASSES[this.data.class].bonus}`;
         } else {
-            occasionBonus.textContent = '';
+            classBonus.textContent = '';
         }
     }
 
@@ -248,7 +248,7 @@ class AdventureSheet {
 
     validateImportedData(data) {
         return (
-            data.hasOwnProperty('test') &&
+            data.hasOwnProperty('body') &&
             data.hasOwnProperty('skill') &&
             data.hasOwnProperty('mind') &&
             data.hasOwnProperty('battles') &&

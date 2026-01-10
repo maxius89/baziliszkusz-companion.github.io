@@ -39,14 +39,14 @@ export class CharacterGenerator {
 
     init() {
         this.data = {
-            test: 18,
+            body: 18,
             skill: 7,
             mind: 7,
             maxSpells: 1,
             pointsSpent: 0,
             totalPoints: 14,
             selections: {
-                test: 0,
+                body: 0,
                 skill: 0,
                 mind: 0,
                 spells: 0
@@ -119,12 +119,12 @@ export class CharacterGenerator {
     }
 
     setupControls() {
-        // Test controls
-        const testControls = document.getElementById('testControls');
-        testControls.innerHTML = '';
+        // Body controls
+        const bodyControls = document.getElementById('bodyControls');
+        bodyControls.innerHTML = '';
         for (let i = 1; i <= 10; i++) {
-            const btn = this.createStatButton('test', i, i);
-            testControls.appendChild(btn);
+            const btn = this.createStatButton('body', i, i);
+            bodyControls.appendChild(btn);
         }
 
         // Skill controls
@@ -203,7 +203,7 @@ export class CharacterGenerator {
         if (value === 0) return 0;
 
         switch (stat) {
-            case 'test':
+            case 'body':
                 return value;
             case 'skill':
             case 'mind':
@@ -221,14 +221,14 @@ export class CharacterGenerator {
 
     updateDisplay() {
         let totalSpent = 0;
-        totalSpent += this.getStatCost('test', this.data.selections.test);
+        totalSpent += this.getStatCost('body', this.data.selections.body);
         totalSpent += this.getStatCost('skill', this.data.selections.skill);
         totalSpent += this.getStatCost('mind', this.data.selections.mind);
         totalSpent += this.getStatCost('spells', this.data.selections.spells);
 
         this.data.pointsSpent = totalSpent;
 
-        document.getElementById('genTest').textContent = 18 + this.data.selections.test;
+        document.getElementById('genBody').textContent = 18 + this.data.selections.body;
         document.getElementById('genSkill').textContent = 7 + this.data.selections.skill;
         document.getElementById('genMind').textContent = 7 + this.data.selections.mind;
         document.getElementById('genSpells').textContent = 1 + this.data.selections.spells;
@@ -255,7 +255,7 @@ export class CharacterGenerator {
     updateButtons() {
         const remaining = this.data.totalPoints - this.data.pointsSpent;
 
-        ['test', 'skill', 'mind', 'spells'].forEach(stat => {
+        ['body', 'skill', 'mind', 'spells'].forEach(stat => {
             const controls = document.getElementById(`${stat}Controls`);
             const buttons = controls.querySelectorAll('.stat-btn');
             const currentSelection = this.data.selections[stat];
@@ -356,7 +356,7 @@ export class CharacterGenerator {
     }
 
     reset() {
-        this.data.selections = { test: 0, skill: 0, mind: 0, spells: 0 };
+        this.data.selections = { body: 0, skill: 0, mind: 0, spells: 0 };
         this.data.pointsSpent = 0;
         this.data.selectedSpells = [];
         this.data.selectedClass = '';
@@ -392,29 +392,29 @@ export class CharacterGenerator {
         }
 
         // Apply base stats
-        let finalTest = 18 + this.data.selections.test;
+        let finalBody = 18 + this.data.selections.body;
         let finalSkill = 7 + this.data.selections.skill;
         let finalMind = 7 + this.data.selections.mind;
 
         // Apply class bonuses
         const classEffect = this.classes[this.data.selectedClass].effect;
-        if (classEffect.type === 'test') {
-            finalTest += classEffect.value;
+        if (classEffect.type === 'body') {
+            finalBody += classEffect.value;
         } else if (classEffect.type === 'skill') {
             finalSkill += classEffect.value;
         }
 
         // Update main form
-        this.adventureSheet.data.test = finalTest;
+        this.adventureSheet.data.body = finalBody;
         this.adventureSheet.data.skill = finalSkill;
         this.adventureSheet.data.mind = finalMind;
-        this.adventureSheet.data.occasion = this.data.selectedClass;
+        this.adventureSheet.data.class = this.data.selectedClass;
         this.adventureSheet.data.past = this.data.selectedBackground;
 
-        document.getElementById('test').value = finalTest;
+        document.getElementById('body').value = finalBody;
         document.getElementById('skill').value = finalSkill;
         document.getElementById('mind').value = finalMind;
-        document.getElementById('occasion').value = this.data.selectedClass;
+        document.getElementById('class').value = this.data.selectedClass;
         document.getElementById('past').value = this.data.selectedBackground;
 
         // Update bonus displays on main sheet

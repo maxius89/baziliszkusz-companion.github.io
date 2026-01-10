@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Kalandlap - Digitális karakterlap A Baziliszkusz Árnyéka c. könyvhöz">
-    <title>Kalandlap</title>
+    <title>A Baziliszkus Árnyéka - Kalandlap</title>
     <!-- CSS Modules - Order matters! -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
@@ -26,14 +26,14 @@
                 <!-- Player Stats -->
                 <section class="stats-section" aria-label="Karakter statisztikák">
                     <div class="form-group">
-                        <label for="test">TEST:</label>
-                        <input type="number" id="test" min="0" max="99" value="0" aria-label="Test érték">
+                        <label for="body">TEST:</label>
+                        <input type="number" id="body" min="0" max="99" value="0" aria-label="Test érték">
                     </div>
 
                     <div class="divider"></div>
 
                     <div class="form-group">
-                        <label for="skill">KECSESS&#201;G:</label>
+                        <label for="skill">KECSESSÉG:</label>
                         <input type="number" id="skill" min="0" max="99" value="0" aria-label="Kecsesség érték">
                     </div>
 
@@ -48,14 +48,14 @@
                 <!-- Character Background -->
                 <section class="combat-section" aria-label="Karakter háttér">
                     <div class="form-group">
-                        <label for="occasion">ALKASZT:</label>
-                        <select id="occasion" aria-label="Válassz alkasztot">
+                        <label for="class">ALKASZT:</label>
+                        <select id="class" aria-label="Válassz alkasztot">
                             <option value="">-- VÁLASSZ --</option>
                             <option value="magusvadasz">Mágusvadász</option>
                             <option value="szabotor">Szabotőr</option>
                             <option value="vereb">Véreb</option>
                         </select>
-                        <div class="field-bonus" id="occasionBonus"></div>
+                        <div class="field-bonus" id="classBonus"></div>
                     </div>
 
                     <div class="divider"></div>
@@ -75,7 +75,7 @@
                 <!-- Equipment -->
                 <section class="equipment-section" aria-label="Felszerelés">
                     <div class="form-group">
-                        <label for="equipment">FELSZEREL&#201;S:</label>
+                        <label for="equipment">FELSZERELÉS:</label>
                         <textarea id="equipment" rows="12" aria-label="Felszerelés lista"></textarea>
                     </div>
                 </section>
@@ -83,14 +83,14 @@
                 <!-- Spells and Notes -->
                 <section class="spells-notes-section" aria-label="Varázslatok és jegyzetek">
                     <div class="form-group">
-                        <label for="spells">VAR&#193;ZSLATOK:</label>
+                        <label for="spells">VARÁZSLATOK:</label>
                         <textarea id="spells" rows="5" aria-label="Varázslatok lista"></textarea>
                     </div>
 
                     <div class="divider"></div>
 
                     <div class="form-group">
-                        <label for="notes">FELJEGYZ&#201;SEK:</label>
+                        <label for="notes">FELJEGYZÉSEK:</label>
                         <textarea id="notes" rows="5" aria-label="Jegyzetek"></textarea>
                     </div>
                 </section>
@@ -103,14 +103,14 @@
 
             <!-- Action Buttons -->
             <div class="actions">
-                <button id="saveBtn" class="btn btn-primary">&#128190; MENT&#201;S</button>
-                <button id="loadBtn" class="btn btn-secondary">&#128194; BET&#214;LT&#201;S</button>
-                <button id="exportBtn" class="btn btn-secondary">&#128229; EXPORT&#193;L&#193;S</button>
-                <button id="importBtn" class="btn btn-secondary">&#128193; IMPORT&#193;L&#193;S</button>
-                <button id="charGenBtn" class="btn btn-primary">&#9889; GENER&#193;L&#193;S</button>
-                <button id="diceBtn" class="btn btn-primary">&#127922; KOCKA</button>
-                <button id="helpBtn" class="btn btn-secondary">&#10067; S&#218;G&#211;</button>
-                <button id="resetBtn" class="btn btn-danger">&#128260; &#218;JRAKEZD&#201;S</button>
+                <button id="saveBtn" class="btn btn-primary">&#128190; MENTÉS</button>
+                <button id="loadBtn" class="btn btn-secondary">&#128194; BETÖLTÉS</button>
+                <button id="exportBtn" class="btn btn-secondary">&#128229; EXPORTÁLÁS</button>
+                <button id="importBtn" class="btn btn-secondary">&#128193; IMPORTÁLÁS</button>
+                <button id="charGenBtn" class="btn btn-primary">&#9889; KARAKTER GENERÁLÁS</button>
+                <button id="diceBtn" class="btn btn-primary">&#127922; KOCKADOBÁS</button>
+                <button id="helpBtn" class="btn btn-secondary">&#10067; SÚGÓ</button>
+                <button id="resetBtn" class="btn btn-danger">&#128260; ÚJRAKEZDÉS</button>
                 <input type="file" id="importFile" accept=".json" style="display: none;">
             </div>
 
@@ -167,7 +167,7 @@
 
             <div class="chargen-info">
                 <strong>Alap értékek:</strong><br>
-                Test: 18 | Kecseség: 7 | Elme: 7<br>
+                Test: 18 | Kecsesség: 7 | Elme: 7<br>
                 Max varázslatok: 1<br><br>
                 <strong>14 fejlődéspont</strong> áll rendelkezésre.
             </div>
@@ -185,15 +185,15 @@
                 <div class="stat-row">
                     <div class="stat-header">
                         <span class="stat-name">TEST</span>
-                        <span class="stat-value" id="genTest">18</span>
+                        <span class="stat-value" id="genBody">18</span>
                     </div>
-                    <div class="stat-controls" id="testControls"></div>
+                    <div class="stat-controls" id="bodyControls"></div>
                     <div class="stat-cost">+1 = 1 pont (max +10)</div>
                 </div>
 
                 <div class="stat-row">
                     <div class="stat-header">
-                        <span class="stat-name">KECSESÉG</span>
+                        <span class="stat-name">KECSESSÉG</span>
                         <span class="stat-value" id="genSkill">7</span>
                     </div>
                     <div class="stat-controls" id="skillControls"></div>
@@ -324,10 +324,10 @@
         <div class="battle-card">
             <div class="form-group">
                 <label>TEST:</label>
-                <input type="number" min="0" max="99" value="0" data-stat="test">
+                <input type="number" min="0" max="99" value="0" data-stat="body">
             </div>
             <div class="form-group">
-                <label>KECSESÉG:</label>
+                <label>KECSESSÉG:</label>
                 <input type="number" min="0" max="99" value="0" data-stat="skill">
             </div>
             <div class="form-group">

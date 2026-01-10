@@ -7,7 +7,7 @@ export const CLASSES = {
   szabotor: {
     name: 'Szabotőr',
     bonus: '+5 Test',
-    effect: { type: 'test', value: 5 }
+    effect: { type: 'body', value: 5 }
   },
   vereb: {
     name: 'Véreb',
