@@ -66,7 +66,7 @@ class AdventureSheet {
 
             const inputs = card.querySelectorAll('input');
             inputs[0].setAttribute('aria-label', `Ellenfél ${i + 1} Test`);
-            inputs[1].setAttribute('aria-label', `Ellenfél ${i + 1} Kecseség`);
+            inputs[1].setAttribute('aria-label', `Ellenfél ${i + 1} Kecsesség`);
             inputs[2].setAttribute('aria-label', `Ellenfél ${i + 1} Elme`);
 
             battleGrid.appendChild(card);
