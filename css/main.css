@@ -538,6 +538,7 @@ select option:first-child {
   .spells-notes-section,
   .battle-grid {
     grid-column: 1;
+    grid-row: auto;
   }
 
   .battle-grid {
