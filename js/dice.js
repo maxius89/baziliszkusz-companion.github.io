@@ -145,14 +145,13 @@ export class DiceRoller {
 
         history.forEach(entry => {
             const item = template.content.cloneNode(true);
-            const container = item.querySelector('.history-item');
 
             item.querySelector('[data-time]').textContent = entry.timestamp;
 
             if (entry.numDice === 'Harc') {
                 item.querySelector('[data-dice]').textContent = 'Harc:';
                 item.querySelector('[data-total]').textContent = entry.total;
-                item.querySelector('[data-details]').remove(); // Not needed for battle
+                item.querySelector('[data-details]')?.remove(); // Not needed for battle
             } else {
                 item.querySelector('[data-dice]').textContent = `${entry.numDice}D6:`;
                 item.querySelector('[data-total]').textContent = entry.total;
@@ -160,7 +159,7 @@ export class DiceRoller {
                 if (entry.numDice > 1) {
                     item.querySelector('[data-details]').textContent = `(${entry.results.join(' + ')})`;
                 } else {
-                    item.querySelector('[data-details]').remove();
+                    item.querySelector('[data-details]')?.remove();
                 }
             }
 
