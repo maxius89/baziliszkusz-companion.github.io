@@ -183,18 +183,6 @@
   line-height: 1;
 }
 
-.breakdown-calculation {
-  width: 100%;
-  text-align: center;
-  margin-top: 8px;
-  padding-top: 10px;
-  border-top: 2px solid #1a1a1a;
-  font-family: 'Roboto', Arial, sans-serif;
-  font-size: 0.95rem;
-  font-weight: bold;
-  color: #1a1a1a;
-}
-
 .puzzle-result-section {
   background: #ffffff;
   border: 3px solid #1a1a1a;
@@ -242,11 +230,51 @@
   padding: 15px;
 }
 
+.legend-toggle {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.legend-toggle:hover {
+  background: #f0f0f0;
+}
+
+.toggle-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  font-size: 0.8rem;
+}
+
+.legend-toggle.collapsed .toggle-icon {
+  transform: rotate(-90deg);
+}
+
 .legend-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
   gap: 6px;
   margin-top: 10px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+
+.legend-grid.collapsed {
+  max-height: 0;
+  margin-top: 0;
+  opacity: 0;
+}
+
+.legend-grid.expanded {
+  max-height: 500px;
+  opacity: 1;
 }
 
 .legend-item {

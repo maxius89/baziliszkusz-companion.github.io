@@ -54,6 +54,14 @@ export class PuzzleSolver {
       this.calculatePuzzle(e.target.value);
     });
 
+    // Toggle legend
+    const legendToggle = modal.querySelector('.legend-toggle');
+    const legendGrid = modal.querySelector('.legend-grid');
+    legendToggle.addEventListener('click', () => {
+      legendGrid.classList.toggle('expanded');
+      legendToggle.classList.toggle('expanded');
+    });
+
     // Allow ESC to close
     const escHandler = (e) => {
       if (e.key === 'Escape') {
@@ -94,16 +102,10 @@ export class PuzzleSolver {
     // Render breakdown
     breakdown.innerHTML = items.map(item =>
       `<div class="breakdown-item">
-        <span class="breakdown-letter">${item.letter}</span>
-        <span class="breakdown-value">${item.value}</span>
-    </div>`
+                <span class="breakdown-letter">${item.letter}</span>
+                <span class="breakdown-value">${item.value}</span>
+            </div>`
     ).join('');
-
-    // Show calculation if more than one letter
-    if (items.length > 1) {
-      const calculation = items.map(item => item.value).join(' + ');
-      breakdown.innerHTML += `<div class="breakdown-calculation">${calculation} = ${total}</div>`;
-    }
 
     // Update result
     result.textContent = total;
