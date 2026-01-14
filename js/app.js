@@ -2,6 +2,7 @@
 import { StorageManager } from './storage.js';
 import { DiceRoller } from './dice.js';
 import { CharacterGenerator } from './chargen.js';
+import { PuzzleSolver } from './puzzle.js';
 import { CLASSES, BACKGROUNDS } from './config.js';
 
 class AdventureSheet {
@@ -12,6 +13,7 @@ class AdventureSheet {
         this.storageManager = new StorageManager('kalandlap_data');
         this.diceRoller = new DiceRoller(this);
         this.charGen = new CharacterGenerator(this);
+        this.puzzleSolver = new PuzzleSolver(this);
 
         // Initialize data
         this.data = this.initializeData();
@@ -141,6 +143,11 @@ class AdventureSheet {
         // Dice roller button
         document.getElementById('diceBtn').addEventListener('click', () => {
             this.diceRoller.show();
+        });
+
+        // Puzzle solver button
+        document.getElementById('puzzleBtn').addEventListener('click', () => {
+            this.puzzleSolver.show();
         });
 
         // Help button
@@ -284,6 +291,15 @@ class AdventureSheet {
                 modal.remove();
             }
         });
+
+        // Close on ESC key
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                modal.remove();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
     }
 
     showNotification(message) {
@@ -313,39 +329,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.key === 's') {
-        e.preventDefault();
-        document.getElementById('saveBtn')?.click();
-    }
+    // Only handle if Ctrl is pressed
+    if (!e.ctrlKey) return;
 
-    if (e.ctrlKey && e.key === 'l') {
-        e.preventDefault();
-        document.getElementById('loadBtn')?.click();
-    }
+    const shortcuts = {
+        's': 'saveBtn',
+        'l': 'loadBtn',
+        'e': 'exportBtn',
+        'i': 'importBtn',
+        'g': 'charGenBtn',
+        'd': 'diceBtn',
+        'h': 'helpBtn',
+        'p': 'puzzleBtn'
+    };
 
-    if (e.ctrlKey && e.key === 'e') {
+    const buttonId = shortcuts[e.key];
+    if (buttonId) {
         e.preventDefault();
-        document.getElementById('exportBtn')?.click();
-    }
-
-    if (e.ctrlKey && e.key === 'i') {
-        e.preventDefault();
-        document.getElementById('importBtn')?.click();
-    }
-
-    if (e.ctrlKey && e.key === 'g') {
-        e.preventDefault();
-        document.getElementById('charGenBtn')?.click();
-    }
-
-    if (e.ctrlKey && e.key === 'd') {
-        e.preventDefault();
-        document.getElementById('diceBtn')?.click();
-    }
-
-    if (e.ctrlKey && e.key === 'h') {
-        e.preventDefault();
-        document.getElementById('helpBtn')?.click();
+        document.getElementById(buttonId)?.click();
     }
 });
 

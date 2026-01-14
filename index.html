@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/chargen.css">
     <link rel="stylesheet" href="css/dice.css">
+    <link rel="stylesheet" href="css/puzzle.css">
 </head>
 
 <body>
@@ -109,6 +110,7 @@
                 <button id="importBtn" class="btn btn-secondary">&#128193; IMPORTÁLÁS</button>
                 <button id="charGenBtn" class="btn btn-primary">&#9889; KARAKTER GENERÁLÁS</button>
                 <button id="diceBtn" class="btn btn-primary">&#127922; KOCKADOBÁS</button>
+                <button id="puzzleBtn" class="btn btn-secondary">🧩 REJTVÉNY</button>
                 <button id="helpBtn" class="btn btn-secondary">&#10067; SÚGÓ</button>
                 <button id="resetBtn" class="btn btn-danger">&#128260; ÚJRAKEZDÉS</button>
                 <input type="file" id="importFile" accept=".json" style="display: none;">
@@ -302,6 +304,10 @@
                     <span class="shortcut-desc">Kockadobó megnyitása</span>
                 </div>
                 <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + P</span>
+                    <span class="shortcut-desc">Rejtvényfejtő megnyitása</span>
+                </div>
+                <div class="shortcut-item">
                     <span class="shortcut-key">Ctrl + H</span>
                     <span class="shortcut-desc">Súgó megjelenítése</span>
                 </div>
@@ -317,6 +323,50 @@
                 <li><strong>Karakter generálás:</strong> A könyv szabályai alapján</li>
                 <li><strong>Ellenfél követés:</strong> 9 ellenfél statisztikáinak nyomon követése</li>
             </ul>
+        </div>
+    </template>
+
+
+    <template id="legend-item-template">
+        <div class="legend-item" role="cell">
+            <span class="legend-letter" data-legend-letter></span>
+            <span class="legend-value" data-legend-value></span>
+        </div>
+    </template>
+
+    <template id="puzzle-modal-template">
+        <div class="puzzle-content">
+            <button class="puzzle-close" aria-label="Bezár">×</button>
+
+            <h2>REJTVÉNYFEJTŐ</h2>
+
+            <div class="puzzle-info">
+                <p><strong>Hogyan működik:</strong> Írd be a rejtvény megoldását, és automatikusan megkapod a megfelelő
+                    számot!</p>
+            </div>
+
+            <div class="puzzle-input-section">
+                <label for="puzzleInput">MEGOLDÁS:</label>
+                <input type="text" id="puzzleInput" class="puzzle-input" placeholder="Írd be a betűket..."
+                    autocomplete="off" aria-describedby="puzzleInfo" />
+            </div>
+
+            <div class="puzzle-breakdown" id="puzzleBreakdown" aria-live="polite"></div>
+
+            <div class="puzzle-result-section">
+                <div class="puzzle-result-label">EREDMÉNY:</div>
+                <div class="puzzle-result" id="puzzleResult" aria-live="polite">0</div>
+            </div>
+
+            <div class="puzzle-legend">
+                <h3 class="legend-toggle" role="button" tabindex="0" aria-expanded="false">
+                    <span class="toggle-icon" aria-hidden="true">▼</span>
+                    <span>Betű-Szám Táblázat</span>
+                </h3>
+                <div class="legend-grid" role="table" aria-label="Betű-szám táblázat">
+                    <!-- Generated dynamically from LETTER_VALUES -->
+                </div>
+            </div>
         </div>
     </template>
 
@@ -353,6 +403,13 @@
             <span class="history-dice" data-dice></span>
             <span class="history-total" data-total></span>
             <span class="history-details" data-details></span>
+        </div>
+    </template>
+
+    <template id="breakdown-item-template">
+        <div class="breakdown-item">
+            <span class="breakdown-letter" data-letter></span>
+            <span class="breakdown-value" data-value></span>
         </div>
     </template>
 
