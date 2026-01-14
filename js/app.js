@@ -2,6 +2,7 @@
 import { StorageManager } from './storage.js';
 import { DiceRoller } from './dice.js';
 import { CharacterGenerator } from './chargen.js';
+import { PuzzleSolver } from './puzzle.js';
 import { CLASSES, BACKGROUNDS } from './config.js';
 
 class AdventureSheet {
@@ -12,6 +13,7 @@ class AdventureSheet {
         this.storageManager = new StorageManager('kalandlap_data');
         this.diceRoller = new DiceRoller(this);
         this.charGen = new CharacterGenerator(this);
+        this.puzzleSolver = new PuzzleSolver(this);
 
         // Initialize data
         this.data = this.initializeData();
@@ -141,6 +143,11 @@ class AdventureSheet {
         // Dice roller button
         document.getElementById('diceBtn').addEventListener('click', () => {
             this.diceRoller.show();
+        });
+
+        // Puzzle solver button
+        document.getElementById('puzzleBtn').addEventListener('click', () => {
+            this.puzzleSolver.show();
         });
 
         // Help button
@@ -341,6 +348,11 @@ document.addEventListener('keydown', (e) => {
     if (e.ctrlKey && e.key === 'd') {
         e.preventDefault();
         document.getElementById('diceBtn')?.click();
+    }
+
+    if (e.ctrlKey && e.key === 'p') {
+        e.preventDefault();
+        document.getElementById('puzzleBtn')?.click();
     }
 
     if (e.ctrlKey && e.key === 'h') {

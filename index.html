@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/chargen.css">
     <link rel="stylesheet" href="css/dice.css">
+    <link rel="stylesheet" href="css/puzzle.css">
 </head>
 
 <body>
@@ -109,6 +110,7 @@
                 <button id="importBtn" class="btn btn-secondary">&#128193; IMPORTÁLÁS</button>
                 <button id="charGenBtn" class="btn btn-primary">&#9889; KARAKTER GENERÁLÁS</button>
                 <button id="diceBtn" class="btn btn-primary">&#127922; KOCKADOBÁS</button>
+                <button id="puzzleBtn" class="btn btn-secondary">🧩 REJTVÉNY</button>
                 <button id="helpBtn" class="btn btn-secondary">&#10067; SÚGÓ</button>
                 <button id="resetBtn" class="btn btn-danger">&#128260; ÚJRAKEZDÉS</button>
                 <input type="file" id="importFile" accept=".json" style="display: none;">
@@ -302,6 +304,10 @@
                     <span class="shortcut-desc">Kockadobó megnyitása</span>
                 </div>
                 <div class="shortcut-item">
+                    <span class="shortcut-key">Ctrl + P</span>
+                    <span class="shortcut-desc">Rejtvényfejtő megnyitása</span>
+                </div>
+                <div class="shortcut-item">
                     <span class="shortcut-key">Ctrl + H</span>
                     <span class="shortcut-desc">Súgó megjelenítése</span>
                 </div>
@@ -317,6 +323,90 @@
                 <li><strong>Karakter generálás:</strong> A könyv szabályai alapján</li>
                 <li><strong>Ellenfél követés:</strong> 9 ellenfél statisztikáinak nyomon követése</li>
             </ul>
+        </div>
+    </template>
+
+    <template id="puzzle-modal-template">
+        <div class="puzzle-content">
+            <button class="puzzle-close" aria-label="Bezár">×</button>
+
+            <h2>REJTVÉNYFEJTŐ</h2>
+
+            <div class="puzzle-info">
+                <p><strong>Hogyan működik:</strong></p>
+                <p>Írd be a rejtvény megoldását, és automatikusan megkapod a megfelelő számot!</p>
+            </div>
+
+            <div class="puzzle-input-section">
+                <label for="puzzleInput">MEGOLDÁS:</label>
+                <input type="text" id="puzzleInput" class="puzzle-input" placeholder="Írd be a betűket..."
+                    autocomplete="off" />
+            </div>
+
+            <div class="puzzle-breakdown" id="puzzleBreakdown"></div>
+
+            <div class="puzzle-result-section">
+                <div class="puzzle-result-label">EREDMÉNY:</div>
+                <div class="puzzle-result" id="puzzleResult">0</div>
+            </div>
+
+            <div class="puzzle-legend">
+                <h3>Betű-Szám Táblázat</h3>
+                <div class="legend-grid">
+                    <div class="legend-item"><span class="legend-letter">A</span><span class="legend-value">2</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">B</span><span class="legend-value">25</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">C</span><span class="legend-value">3</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">D</span><span class="legend-value">15</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">E</span><span class="legend-value">4</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">F</span><span class="legend-value">19</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">G</span><span class="legend-value">9</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">H</span><span class="legend-value">24</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">I</span><span class="legend-value">6</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">J</span><span class="legend-value">22</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">K</span><span class="legend-value">5</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">L</span><span class="legend-value">21</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">M</span><span class="legend-value">1</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">N</span><span class="legend-value">20</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">O</span><span class="legend-value">8</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">P</span><span class="legend-value">17</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">Q</span><span class="legend-value">14</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">R</span><span class="legend-value">11</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">S</span><span class="legend-value">18</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">T</span><span class="legend-value">13</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">U</span><span class="legend-value">10</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">V</span><span class="legend-value">5</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">W</span><span class="legend-value">9</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">X</span><span class="legend-value">6</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">Y</span><span class="legend-value">12</span>
+                    </div>
+                    <div class="legend-item"><span class="legend-letter">Z</span><span class="legend-value">7</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </template>
 
