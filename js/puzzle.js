@@ -94,10 +94,9 @@ export class PuzzleSolver {
     // Render breakdown
     breakdown.innerHTML = items.map(item =>
       `<div class="breakdown-item">
-                <span class="breakdown-letter">${item.letter}</span>
-                <span class="breakdown-arrow">→</span>
-                <span class="breakdown-value">${item.value}</span>
-            </div>`
+        <span class="breakdown-letter">${item.letter}</span>
+        <span class="breakdown-value">${item.value}</span>
+    </div>`
     ).join('');
 
     // Show calculation if more than one letter

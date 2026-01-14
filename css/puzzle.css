@@ -21,8 +21,8 @@
 .puzzle-content {
   background: #f5f3e8;
   border: 4px solid #1a1a1a;
-  padding: 40px;
-  max-width: 800px;
+  padding: 30px;
+  max-width: 600px;
   width: 90%;
   position: relative;
   box-shadow: 0 0 0 8px #3a3a3a;
@@ -33,39 +33,43 @@
 .puzzle-content h2 {
   text-align: center;
   font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 2.5rem;
+  font-size: 2rem;
   letter-spacing: 6px;
   color: #1a1a1a;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   border-bottom: 3px solid #1a1a1a;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
 }
 
 .puzzle-content h3 {
   font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.3rem;
-  letter-spacing: 3px;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
   color: #1a1a1a;
-  margin-top: 30px;
-  margin-bottom: 15px;
+  margin-top: 20px;
+  margin-bottom: 10px;
   text-align: center;
   border-bottom: 2px solid #1a1a1a;
-  padding-bottom: 8px;
+  padding-bottom: 6px;
 }
 
 .puzzle-close {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 10px;
+  right: 10px;
   background: transparent;
   border: 3px solid #1a1a1a;
   color: #1a1a1a;
   font-size: 1.5rem;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.2s ease;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .puzzle-close:hover {
@@ -76,16 +80,17 @@
 .puzzle-info {
   background: #fffef0;
   border: 2px solid #1a1a1a;
-  padding: 15px;
-  margin-bottom: 25px;
+  padding: 12px;
+  margin-bottom: 15px;
   font-family: 'Roboto', Arial, sans-serif;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  font-size: 0.85rem;
+  line-height: 1.5;
   color: #333;
+  text-align: center;
 }
 
 .puzzle-info p {
-  margin: 5px 0;
+  margin: 3px 0;
 }
 
 .puzzle-info strong {
@@ -93,31 +98,31 @@
 }
 
 .puzzle-input-section {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 .puzzle-input-section label {
   display: block;
   font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.2rem;
-  letter-spacing: 3px;
+  font-size: 1rem;
+  letter-spacing: 2px;
   color: #1a1a1a;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   text-align: center;
 }
 
 .puzzle-input {
   width: 100%;
-  padding: 15px;
+  padding: 12px;
   border: 3px solid #1a1a1a;
   background: #ffffff;
   font-family: 'Roboto', Arial, sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: bold;
   color: #1a1a1a;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   transition: all 0.2s ease;
 }
 
@@ -129,16 +134,16 @@
 }
 
 .puzzle-breakdown {
-  min-height: 60px;
+  min-height: 50px;
   background: #ffffff;
   border: 2px solid #1a1a1a;
-  padding: 15px;
-  margin-bottom: 25px;
+  padding: 12px;
+  margin-bottom: 15px;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .breakdown-empty {
@@ -147,49 +152,45 @@
   color: #666;
   font-style: italic;
   font-family: 'Roboto', Arial, sans-serif;
-  padding: 10px;
+  padding: 8px;
+  font-size: 0.9rem;
 }
 
 .breakdown-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+  gap: 4px;
+  padding: 6px 10px;
   background: #f9f9f9;
   border: 2px solid #1a1a1a;
+  min-width: 45px;
 }
 
 .breakdown-letter {
   font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 900;
   color: #1a1a1a;
-  min-width: 25px;
-  text-align: center;
-}
-
-.breakdown-arrow {
-  color: #666;
-  font-size: 1rem;
+  line-height: 1;
 }
 
 .breakdown-value {
   font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #1a1a1a;
-  min-width: 30px;
-  text-align: center;
+  color: #666;
+  line-height: 1;
 }
 
 .breakdown-calculation {
   width: 100%;
   text-align: center;
-  margin-top: 10px;
-  padding-top: 15px;
+  margin-top: 8px;
+  padding-top: 10px;
   border-top: 2px solid #1a1a1a;
   font-family: 'Roboto', Arial, sans-serif;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: bold;
   color: #1a1a1a;
 }
@@ -197,26 +198,26 @@
 .puzzle-result-section {
   background: #ffffff;
   border: 3px solid #1a1a1a;
-  padding: 25px;
-  margin-bottom: 30px;
+  padding: 15px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
 .puzzle-result-label {
   font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.2rem;
-  letter-spacing: 3px;
+  font-size: 1rem;
+  letter-spacing: 2px;
   color: #1a1a1a;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .puzzle-result {
   font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: 900;
   color: #1a1a1a;
   line-height: 1;
-  padding: 20px;
+  padding: 15px;
   background: #fffef0;
   border: 3px solid #1a1a1a;
   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
@@ -238,43 +239,45 @@
 .puzzle-legend {
   background: #ffffff;
   border: 2px solid #1a1a1a;
-  padding: 20px;
+  padding: 15px;
 }
 
 .legend-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 10px;
-  margin-top: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+  gap: 6px;
+  margin-top: 10px;
 }
 
 .legend-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px 5px;
+  padding: 6px 4px;
   border: 2px solid #1a1a1a;
   background: #f9f9f9;
 }
 
 .legend-letter {
   font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 900;
   color: #1a1a1a;
+  line-height: 1;
 }
 
 .legend-value {
   font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #666;
-  margin-top: 5px;
+  margin-top: 3px;
+  line-height: 1;
 }
 
 /* Scrollbar for puzzle modal */
 .puzzle-content::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 .puzzle-content::-webkit-scrollbar-track {
@@ -293,38 +296,55 @@
 /* Responsive */
 @media (max-width: 768px) {
   .puzzle-content {
-    padding: 30px 20px;
+    padding: 25px 15px;
   }
 
   .puzzle-content h2 {
-    font-size: 2rem;
+    font-size: 1.7rem;
     letter-spacing: 4px;
+    margin-bottom: 15px;
   }
 
   .puzzle-input {
-    font-size: 1.2rem;
-    padding: 12px;
+    font-size: 1.1rem;
+    padding: 10px;
   }
 
   .puzzle-result {
-    font-size: 3rem;
-    padding: 15px;
+    font-size: 2.5rem;
+    padding: 12px;
   }
 
   .legend-grid {
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 5px;
   }
 
   .breakdown-item {
-    padding: 6px 10px;
+    padding: 5px 8px;
+    min-width: 40px;
   }
 
   .breakdown-letter {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .breakdown-value {
-    font-size: 1.1rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .puzzle-content h2 {
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+  }
+
+  .puzzle-result {
+    font-size: 2rem;
+  }
+
+  .legend-grid {
+    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
   }
 }
