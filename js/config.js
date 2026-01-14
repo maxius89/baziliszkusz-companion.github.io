@@ -42,3 +42,11 @@ export const SPELLS = {
   izomsorvadas: { nameText: 'Izomsorvadás', mindReq: 9 },
   eterfolyam: { nameText: 'Éterfolyam', mindReq: 8 }
 }
+
+export const LETTER_VALUES = {
+  'A': 2, 'B': 25, 'C': 3, 'D': 15, 'E': 4, 'F': 19,
+  'G': 9, 'H': 24, 'I': 6, 'J': 22, 'K': 5, 'L': 21,
+  'M': 1, 'N': 20, 'O': 8, 'P': 17, 'Q': 14, 'R': 11,
+  'S': 18, 'T': 13, 'U': 10, 'V': 5, 'W': 9, 'X': 6,
+  'Y': 12, 'Z': 7
+};

@@ -30,6 +30,7 @@
   overflow-y: auto;
 }
 
+/* Headers */
 .puzzle-content h2 {
   text-align: center;
   font-family: 'Bebas Neue', Arial, sans-serif;
@@ -46,13 +47,13 @@
   font-size: 1.1rem;
   letter-spacing: 2px;
   color: #1a1a1a;
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin: 20px 0 10px;
   text-align: center;
   border-bottom: 2px solid #1a1a1a;
   padding-bottom: 6px;
 }
 
+/* Close button - reuses modal-close pattern */
 .puzzle-close {
   position: absolute;
   top: 10px;
@@ -77,6 +78,7 @@
   color: #f5f3e8;
 }
 
+/* Info box */
 .puzzle-info {
   background: #fffef0;
   border: 2px solid #1a1a1a;
@@ -97,6 +99,7 @@
   color: #1a1a1a;
 }
 
+/* Input section */
 .puzzle-input-section {
   margin-bottom: 15px;
 }
@@ -133,6 +136,7 @@
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Breakdown section */
 .puzzle-breakdown {
   min-height: 50px;
   background: #ffffff;
@@ -156,7 +160,9 @@
   font-size: 0.9rem;
 }
 
-.breakdown-item {
+/* Breakdown and legend items share similar structure */
+.breakdown-item,
+.legend-item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -167,22 +173,46 @@
   min-width: 45px;
 }
 
-.breakdown-letter {
+.legend-item {
+  padding: 6px 4px;
+  min-width: auto;
+}
+
+/* Letter and value styles - shared between breakdown and legend */
+.breakdown-letter,
+.legend-letter {
   font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.3rem;
   font-weight: 900;
   color: #1a1a1a;
   line-height: 1;
 }
 
-.breakdown-value {
+.breakdown-letter {
+  font-size: 1.3rem;
+}
+
+.legend-letter {
+  font-size: 1.2rem;
+}
+
+.breakdown-value,
+.legend-value {
   font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.1rem;
   font-weight: 700;
   color: #666;
   line-height: 1;
 }
 
+.breakdown-value {
+  font-size: 1.1rem;
+}
+
+.legend-value {
+  font-size: 0.95rem;
+  margin-top: 3px;
+}
+
+/* Result section */
 .puzzle-result-section {
   background: #ffffff;
   border: 3px solid #1a1a1a;
@@ -224,6 +254,7 @@
   }
 }
 
+/* Legend section */
 .puzzle-legend {
   background: #ffffff;
   border: 2px solid #1a1a1a;
@@ -233,7 +264,7 @@
 .legend-toggle {
   cursor: pointer;
   user-select: none;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
   margin: 0;
   display: flex;
   align-items: center;
@@ -249,10 +280,11 @@
   display: inline-block;
   transition: transform 0.3s ease;
   font-size: 0.8rem;
+  transform: rotate(-90deg);
 }
 
-.legend-toggle.collapsed .toggle-icon {
-  transform: rotate(-90deg);
+.legend-toggle.expanded .toggle-icon {
+  transform: rotate(0deg);
 }
 
 .legend-grid {
@@ -266,44 +298,12 @@
   opacity: 0;
 }
 
-.legend-grid.collapsed {
-  max-height: 0;
-  margin-top: 0;
-  opacity: 0;
-}
-
 .legend-grid.expanded {
   max-height: 500px;
   opacity: 1;
 }
 
-.legend-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 6px 4px;
-  border: 2px solid #1a1a1a;
-  background: #f9f9f9;
-}
-
-.legend-letter {
-  font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.2rem;
-  font-weight: 900;
-  color: #1a1a1a;
-  line-height: 1;
-}
-
-.legend-value {
-  font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #666;
-  margin-top: 3px;
-  line-height: 1;
-}
-
-/* Scrollbar for puzzle modal */
+/* Scrollbar */
 .puzzle-content::-webkit-scrollbar {
   width: 8px;
 }

@@ -326,6 +326,14 @@
         </div>
     </template>
 
+
+    <template id="legend-item-template">
+        <div class="legend-item" role="cell">
+            <span class="legend-letter" data-legend-letter></span>
+            <span class="legend-value" data-legend-value></span>
+        </div>
+    </template>
+
     <template id="puzzle-modal-template">
         <div class="puzzle-content">
             <button class="puzzle-close" aria-label="Bezár">×</button>
@@ -340,73 +348,23 @@
             <div class="puzzle-input-section">
                 <label for="puzzleInput">MEGOLDÁS:</label>
                 <input type="text" id="puzzleInput" class="puzzle-input" placeholder="Írd be a betűket..."
-                    autocomplete="off" />
+                    autocomplete="off" aria-describedby="puzzleInfo" />
             </div>
 
-            <div class="puzzle-breakdown" id="puzzleBreakdown"></div>
+            <div class="puzzle-breakdown" id="puzzleBreakdown" aria-live="polite"></div>
 
             <div class="puzzle-result-section">
                 <div class="puzzle-result-label">EREDMÉNY:</div>
-                <div class="puzzle-result" id="puzzleResult">0</div>
+                <div class="puzzle-result" id="puzzleResult" aria-live="polite">0</div>
             </div>
 
             <div class="puzzle-legend">
-                <h3 class="legend-toggle">
-                    <span class="toggle-icon">▼</span> Betű-Szám Táblázat
+                <h3 class="legend-toggle" role="button" tabindex="0" aria-expanded="false">
+                    <span class="toggle-icon" aria-hidden="true">▼</span>
+                    <span>Betű-Szám Táblázat</span>
                 </h3>
-                <div class="legend-grid">
-                    <div class="legend-item"><span class="legend-letter">A</span><span class="legend-value">2</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">B</span><span class="legend-value">25</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">C</span><span class="legend-value">3</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">D</span><span class="legend-value">15</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">E</span><span class="legend-value">4</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">F</span><span class="legend-value">19</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">G</span><span class="legend-value">9</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">H</span><span class="legend-value">24</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">I</span><span class="legend-value">6</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">J</span><span class="legend-value">22</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">K</span><span class="legend-value">5</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">L</span><span class="legend-value">21</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">M</span><span class="legend-value">1</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">N</span><span class="legend-value">20</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">O</span><span class="legend-value">8</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">P</span><span class="legend-value">17</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">Q</span><span class="legend-value">14</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">R</span><span class="legend-value">11</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">S</span><span class="legend-value">18</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">T</span><span class="legend-value">13</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">U</span><span class="legend-value">10</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">V</span><span class="legend-value">5</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">W</span><span class="legend-value">9</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">X</span><span class="legend-value">6</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">Y</span><span class="legend-value">12</span>
-                    </div>
-                    <div class="legend-item"><span class="legend-letter">Z</span><span class="legend-value">7</span>
-                    </div>
+                <div class="legend-grid" role="table" aria-label="Betű-szám táblázat">
+                    <!-- Generated dynamically from LETTER_VALUES -->
                 </div>
             </div>
         </div>
@@ -445,6 +403,13 @@
             <span class="history-dice" data-dice></span>
             <span class="history-total" data-total></span>
             <span class="history-details" data-details></span>
+        </div>
+    </template>
+
+    <template id="breakdown-item-template">
+        <div class="breakdown-item">
+            <span class="breakdown-letter" data-letter></span>
+            <span class="breakdown-value" data-value></span>
         </div>
     </template>
 
